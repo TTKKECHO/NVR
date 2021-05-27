@@ -1,0 +1,40 @@
+[2021-05-27 14:20:18.246][INF] The COM:HCCoreBase ver is 6.1.4.15, 2020_03_05. Async:1.
+[2021-05-27 14:20:18.246][INF] The COM:Core ver is 6.1.6.4, 2020_12_31. Async:1.
+[2021-05-27 14:20:18.246][INF] This HCNetSDK ver is 6.1.6.4 Ver 2020_12_31.
+[2021-05-27 14:20:18.246][INF] Login dev 192.168.0.32:8000.
+[2021-05-27 14:20:18.246][INF] dwTotalNum[2048]
+[2021-05-27 14:20:18.249][INF] Private connect 192.168.0.32:8000 sock=36 this=0x6e42d64 cmd=0x10000 port=46112
+[2021-05-27 14:20:18.249][INF] LogonDev1 in[192.168.0.32:8000]
+[2021-05-27 14:20:18.250][DBG] CCoreGlobalCtrlBase::LoadDSo, HPR_LoadDSo Succ, Path[/home/xinke03/Hk/Test/lib/libcrypto.so], hHandleRet[115657712]
+[2021-05-27 14:20:18.252][DBG] CCoreGlobalCtrlBase::LoadDSo, HPR_LoadDSo Succ, Path[/home/xinke03/Hk/Test/lib/libssl.so], hHandleRet[115658928]
+[2021-05-27 14:20:18.252][INF] SSLTRANSAPI::LoadAPI, libeay, Load Real Path[/home/xinke03/Hk/Test/lib/libcrypto.so]
+[2021-05-27 14:20:18.252][INF] SSLTRANSAPI::LoadAPI, libssl, Load Real Path[/home/xinke03/Hk/Test/lib/libssl.so]
+[2021-05-27 14:20:18.252][ERR] SSLTRANSAPI::IsAllAPILoaded, OpenSSL_version Unload
+[2021-05-27 14:20:18.252][ERR] OpenSSL, Not All Function Loaded!
+[2021-05-27 14:20:18.253][INF] SSLTRANSAPI::PrintVersion, SSLeay_version info [OpenSSL 1.0.2t  10 Sep 2019]
+[2021-05-27 14:20:18.253][INF] CSSLTrans::SSLCtxInit, dwSSLVersion[0], m_fnClientMethodV23
+[2021-05-27 14:20:18.430][DBG] CComBase::Load, Load szDllPath[/home/xinke03/Hk/Test/lib/HCNetSDKCom/libHCAlarm.so] SUCC
+[2021-05-27 14:20:18.430][INF] AbilityAnalyze---Init-- start
+[2021-05-27 14:20:18.430][DBG] AbilityAnalyze---Init-- over, DeviceList path [/home/xinke03/Hk/Test/lib/HCNetSDKCom/LocalXml/DeviceList.xml], load result[0]
+[2021-05-27 14:20:18.430][INF] The COM:HCAlarm ver is 6.1.6.4, 2020_12_31.
+[2021-05-27 14:20:18.432][INF] Private connect 192.168.0.32:8000 sock=36 this=0x6e42d64 cmd=0x111021 port=46114
+[2021-05-27 14:20:26.190][INF] Alarm[0] IP[192.168.0.32] data_len[137047] alarm_len[137047] status[125]
+[2021-05-27 14:20:45.746][INF] Alarm[0] IP[192.168.0.32] data_len[140942] alarm_len[140942] status[125]
+[2021-05-27 14:24:16.266][INF] Alarm[0] IP[192.168.0.32] data_len[127654] alarm_len[127654] status[125]
+[2021-05-27 14:25:31.512][INF] Alarm[0] IP[192.168.0.32] data_len[145025] alarm_len[145025] status[125]
+[2021-05-27 14:31:51.854][INF] Alarm[0] IP[192.168.0.32] data_len[192760] alarm_len[192760] status[125]
+[2021-05-27 14:43:16.600][INF] Alarm[0] IP[192.168.0.32] data_len[164522] alarm_len[164522] status[125]
+[2021-05-27 14:43:17.452][INF] Alarm[0] IP[192.168.0.32] data_len[188435] alarm_len[188435] status[125]
+[2021-05-27 14:43:43.185][INF] Alarm[0] IP[192.168.0.32] data_len[166790] alarm_len[166790] status[125]
+[2021-05-27 14:53:30.900][INF] Alarm[0] IP[192.168.0.32] data_len[121690] alarm_len[121690] status[125]
+[2021-05-27 14:55:07.166][INF] Alarm[0] IP[192.168.0.32] data_len[122414] alarm_len[122414] status[125]
+[2021-05-27 14:56:02.917][INF] Alarm[0] IP[192.168.0.32] data_len[197019] alarm_len[197019] status[125]
+[2021-05-27 14:56:39.101][INF] Alarm[0] IP[192.168.0.32] data_len[114830] alarm_len[114830] status[125]
+[2021-05-27 15:19:07.302][INF] Alarm[0] IP[192.168.0.32] data_len[114934] alarm_len[114934] status[125]
+[2021-05-27 15:26:04.898][INF] Alarm[0] IP[192.168.0.32] data_len[191328] alarm_len[191328] status[125]
+[2021-05-27 15:26:35.617][INF] Alarm[0] IP[192.168.0.32] data_len[187436] alarm_len[187436] status[125]
+[2021-05-27 15:35:33.142][INF] Alarm[0] IP[192.168.0.32] data_len[162679] alarm_len[162679] status[125]
+[2021-05-27 15:36:42.118][INF] Alarm[0] IP[192.168.0.32] data_len[187796] alarm_len[187796] status[125]
+[2021-05-27 15:38:05.056][INF] Alarm[0] IP[192.168.0.32] data_len[113993] alarm_len[113993] status[125]
+[2021-05-27 15:40:24.331][INF] Alarm[0] IP[192.168.0.32] data_len[186609] alarm_len[186609] status[125]
+[2021-05-27 15:44:40.538][INF] Alarm[0] IP[192.168.0.32] data_len[115357] alarm_len[115357] status[125]
