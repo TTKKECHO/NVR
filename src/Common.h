@@ -8,6 +8,7 @@
 #include "HCNetSDK.h"
 
 #define ALARM 1
+#define ADDFACE 0
 
 
 void Demo_SDK_Version();

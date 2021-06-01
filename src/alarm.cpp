@@ -45,6 +45,29 @@ BOOL CALLBACK MessageCallback(LONG lCommand, NET_DVR_ALARMER *pAlarmer, char *pA
         }
         break;
         
+         case COMM_VCA_ALARM: //智能检测通用报警
+        {
+            if(pAlarmInfo == NULL)
+            {
+                return FALSE;                
+            }
+            printf("智能检测通用报警, Json数据内容：%s\n", pAlarmInfo);
+        }
+        break;
+
+
+        case COMM_UPLOAD_PLATE_RESULT:
+        {
+            printf("看，是车牌\n");
+        }
+        break;
+
+        case COMM_ITS_PLATE_RESULT:
+        {
+            printf("看，是车辆\n");
+        }
+        break;
+
         case COMM_UPLOAD_FACESNAP_RESULT: //人脸抓拍报警信息
         {
             NET_VCA_FACESNAP_RESULT struFaceSnap = {0};

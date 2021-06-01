@@ -74,6 +74,7 @@ int main()
     LONG lHandle;
     NET_DVR_SETUPALARM_PARAM  struAlarmParam={0};
     struAlarmParam.dwSize=sizeof(struAlarmParam);
+	struAlarmParam.byAlarmTypeURL=1;
 	//struAlarmParam.byFaceAlarmDetection = 0;
     //其他报警布防参数不需要设置
 
@@ -108,109 +109,112 @@ int main()
 	//NET_DVR_GetPicture(user_id,(char*)"ch00001_00010000019004882483200094680",(char*)"./Image/test.jpeg");
 	
 /************************人脸库管理************************/
-	// NET_DVR_FACELIB_COND *struInput =new NET_DVR_FACELIB_COND();
-	// char fdid[256]="0";
-	// struInput->dwSize = sizeof(NET_DVR_FACELIB_COND);
-	// strcpy(struInput->szFDID,fdid) ;
-	// struInput->byConcurrent = 0;
-	// struInput->byCover = 1;
-	// struInput->byCustomFaceLibID = 0;
+#if ADDFACE
+	NET_DVR_FACELIB_COND *struInput =new NET_DVR_FACELIB_COND();
+	char fdid[256]="65C01B18FE9B48FCB1866F151196D204";
+	struInput->dwSize = sizeof(NET_DVR_FACELIB_COND);
+	strcpy(struInput->szFDID,fdid) ;
+	struInput->byConcurrent = 0;
+	struInput->byCover = 1;
+	struInput->byCustomFaceLibID = 0;
 
 
 
-	// NET_DVR_SEND_PARAM_IN struImageInfo =  {0};
-	// fstream f;
-	// string img;
-	// f.open("Image/2.jpg",ios::in|ios::binary);
-	// if(f)
-	// {
-	// 	f.seekg(0,f.end);
-	// 	unsigned int length = f.tellg();
-	// 	f.seekg(0,f.beg);
-	// 	char * buffer = new char[length];
-	// 	cout<<"length:"<<length<<endl;
-	// 	f.read(buffer,length);
-	// 	struImageInfo.pSendData=(BYTE*)buffer;
-	// 	cout<<"flag"<<endl;
-	// 	struImageInfo.dwSendDataLen = length;
-	// 	f.close();
-	// }
-	// else{
-	// 	cout<<"Open File Failed"<<endl;
-	// }
-	// cout<< "imgdata:"<<struImageInfo.pSendData<<endl;
+	NET_DVR_SEND_PARAM_IN struImageInfo =  {0};
+	fstream f;
+	string img;
+	f.open("Image/2.jpg",ios::in|ios::binary);
+	if(f)
+	{
+		f.seekg(0,f.end);
+		unsigned int length = f.tellg();
+		f.seekg(0,f.beg);
+		char * buffer = new char[length];
+		cout<<"length:"<<length<<endl;
+		f.read(buffer,length);
+		struImageInfo.pSendData=(BYTE*)buffer;
+		cout<<"flag"<<endl;
+		struImageInfo.dwSendDataLen = length;
+		f.close();
+	}
+	else{
+		cout<<"Open File Failed"<<endl;
+	}
+	cout<< "imgdata:"<<struImageInfo.pSendData<<endl;
 
-	// struImageInfo.byPicType=1;
-	// struImageInfo.byPicURL=0;
-	// struImageInfo.byRes1 = 0;
-	// struImageInfo.dwPicMangeNo=0;
-	// BYTE picname[32]="Image/2.jpg";
-	// memcpy(struImageInfo.sPicName,picname,sizeof(picname));
+	struImageInfo.byPicType=1;
+	struImageInfo.byPicURL=0;
+	struImageInfo.byRes1 = 0;
+	struImageInfo.dwPicMangeNo=0;
+	BYTE picname[32]="Image/2.jpg";
+	memcpy(struImageInfo.sPicName,picname,sizeof(picname));
 
-	// NET_DVR_TIME_V30 uploadTime;
-	// uploadTime.wYear = 2021;
-	// uploadTime.byMonth = 5;
-	// uploadTime.byDay = 25;
-	// uploadTime.byHour = 11;
-	// uploadTime.byMinute = 43;
-	// uploadTime.bySecond = 45;
-	// uploadTime.byISO8601 = 0;
-	// uploadTime.wMilliSec = 100;
-	// uploadTime.cTimeDifferenceH =8;
-	// uploadTime.cTimeDifferenceM = 30;
-	// struImageInfo.struTime = uploadTime;
-	// cout<<"flag2"<<endl;
+	NET_DVR_TIME_V30 uploadTime;
+	uploadTime.wYear = 2021;
+	uploadTime.byMonth = 5;
+	uploadTime.byDay = 25;
+	uploadTime.byHour = 11;
+	uploadTime.byMinute = 43;
+	uploadTime.bySecond = 45;
+	uploadTime.byISO8601 = 0;
+	uploadTime.wMilliSec = 100;
+	uploadTime.cTimeDifferenceH =8;
+	uploadTime.cTimeDifferenceM = 30;
+	struImageInfo.struTime = uploadTime;
+	cout<<"flag2"<<endl;
 
-	// //struImageInfo->pSendAppendData ;
-	// fstream f2;
-	// string test2;
-	// f2.open("Image/1.txt",ios::in|ios::binary);
-	// if(f)
-	// {
-	// 	f2.seekg(0,f.end);
-	// 	unsigned int length = f2.tellg();
-	// 	f2.seekg(0,f2.beg);
-	// 	char * buffer = new char[length];
-	// 	cout<<"length："<<length<<endl;
-	// 	f2.read(buffer,length);
-	// 	struImageInfo.dwSendAppendDataLen = length;
-	// 	struImageInfo.pSendAppendData=(BYTE*)buffer;
-	// 	struImageInfo.dwSendAppendDataLen = length;
-	// 	f2.close();
-	// }
-	// cout<<"flag3"<<endl;
+	//struImageInfo->pSendAppendData ;
+	fstream f2;
+	string test2;
+	f2.open("Image/send.xml",ios::in|ios::binary);
+	if(f)
+	{
+		f2.seekg(0,f.end);
+		unsigned int length = f2.tellg();
+		f2.seekg(0,f2.beg);
+		char * buffer = new char[length];
+		cout<<"length："<<length<<endl;
+		f2.read(buffer,length);
+		struImageInfo.dwSendAppendDataLen = length;
+		struImageInfo.pSendAppendData=(BYTE*)buffer;
+		struImageInfo.dwSendAppendDataLen = length;
+		f2.close();
+	}
+	cout<<"flag3"<<endl;
 	
-	// BYTE byres[192]="0";
-	// memcpy(struImageInfo.byRes,byres,sizeof(byres));
+	BYTE byres[192]="0";
+	memcpy(struImageInfo.byRes,byres,sizeof(byres));
 	
-	// int uploaHandle=NET_DVR_UploadFile_V40(user_id,IMPORT_DATA_TO_FACELIB,struInput,sizeof(NET_DVR_FACELIB_COND),NULL,NULL,0);
-	// cout<<"uploadHandle:"<<uploaHandle<<endl;
-	// if(uploaHandle==-1){cout<<"uploadhandle error:"<<NET_DVR_GetLastError()<<endl;}
-	// uploaHandle=NET_DVR_UploadFile_V40(user_id,IMPORT_DATA_TO_FACELIB,struInput,sizeof(NET_DVR_FACELIB_COND),NULL,NULL,0);
-	// cout<<"uploadHandle:"<<uploaHandle<<endl;
-	// if(uploaHandle==-1){cout<<"uploadhandle error:"<<NET_DVR_GetLastError()<<endl;}
+	int uploaHandle=NET_DVR_UploadFile_V40(user_id,IMPORT_DATA_TO_FACELIB,struInput,sizeof(NET_DVR_FACELIB_COND),NULL,NULL,0);
+	cout<<" 1 uploadhandle error:"<<NET_DVR_GetLastError()<<endl;
+	cout<<"uploadHandle:"<<uploaHandle<<endl;
+	if(uploaHandle==-1){cout<<"uploadhandle error:"<<NET_DVR_GetLastError()<<endl;}
+	sleep(1);
+	cout<<" 2  error:"<<NET_DVR_GetLastError()<<endl;
 
-	// int status2= NET_DVR_UploadSend(uploaHandle,&struImageInfo,NULL);
-	// cout<<"uploadsend status:"<<status2<<endl;
-	// if(!status2){cout<<"uploadsend error:"<<NET_DVR_GetLastError()<<endl;}
-	// sleep(1000);
-	// LPDWORD progress = {0};
-	// while(1)
-	// {
-	// 	int status=NET_DVR_GetUploadState(uploaHandle,progress);
-	// 	cout<<"uploadState status:"<<status<<endl;
-	// 	cout<<"进度："<<progress<<endl;
-	// 	if(status==-1){
-	// 		cout<<"upload error2:"<<NET_DVR_GetLastError()<<endl;
-	// 		break;
-	// 	}
-	// 	sleep(100);
-	// } 
-	// NET_DVR_UploadClose(uploaHandle);
+	int status2= NET_DVR_UploadSend(uploaHandle,&struImageInfo,NULL);
+	cout<<"uploadsend status:"<<status2<<endl;
+	if(!status2){cout<<"uploadsend error:"<<NET_DVR_GetLastError()<<endl;}
+	sleep(1);
+	cout<<" 3  error:"<<NET_DVR_GetLastError()<<endl;
+	LPDWORD progress = {0};
+	while(1)
+	{
+
+		int status=NET_DVR_GetUploadState(uploaHandle,progress);
+		cout<<"uploadState status:"<<status<<endl;
+		cout<<"进度："<<progress<<endl;
+		if(status==-1){
+			cout<<"upload error2:"<<NET_DVR_GetLastError()<<endl;
+			break;
+		}
+		sleep(100);
+	} 
+	NET_DVR_UploadClose(uploaHandle);
 
 	
 	return 0;
-
+#endif
 
 
 
