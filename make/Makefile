@@ -28,7 +28,7 @@ OBJFILE	= $(foreach file,$(OBJS),$(notdir $(file)))
 #库文件路径
 LIBPATH	=../lib/
 #LIBS = -Wl,-rpath=./:./HCNetSDKCom:../lib 
-LIBS = -Wl,-rpath=./:./HCNetSDKCom:../lib -lhcnetsdk -lcurl
+LIBS = -Wl,-rpath=./:./HCNetSDKCom:../lib -lhcnetsdk -lcurl -lxml2
 #可执行文件路径
 EXE	= ../NVR.exe
 #链接，生成可执行文件

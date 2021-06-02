@@ -1,0 +1,24 @@
+<FaceAppendData version="2.0" xmlns="http://www.isapi.org/ver20/XMLSchema"> 
+<bornTime>1988-01-01</bornTime>
+<name>基努里维斯</name>
+<sex>male</sex>
+<province>31</province>
+<city>02</city>
+<certificateType>ID</certificateType>
+<certificateNumber>330115200001011689</certificateNumber>
+<PersonInfoExtendList>
+<PersonInfoExtend>
+<id>1</id>
+<enable>true</enable>
+<name>项目</name>
+<value>杨高路改造</value>
+</PersonInfoExtend>
+<PersonInfoExtend>
+<id>2</id>
+<enable>true</enable>
+<name>标段</name>
+<value>1标</value>
+</PersonInfoExtend>
+</PersonInfoExtendList>
+<phoneNumber>18247568978</phoneNumber>
+</FaceAppendData>  

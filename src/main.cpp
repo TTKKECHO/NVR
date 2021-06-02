@@ -12,6 +12,7 @@
 #include "http_libcurl.h"
 #include "base64.h"
 #include "alarm.h"
+#include "facelib.h"
 // #include <curl/curl.h>
 // #include <curl/easy.h>
 
@@ -66,6 +67,16 @@ int main()
         return HPR_ERROR;
     }
 	
+
+
+	//cout<<now<<endl;
+	//get_FDLibList(user_id);
+	//get_FDLib(user_id,"EE96E5C51DE14E3EA22ABA2FED01E5DA"); 
+	get_FDLibPics(user_id,"EE96E5C51DE14E3EA22ABA2FED01E5DA");
+	//add_face(user_id,"EE96E5C51DE14E3EA22ABA2FED01E5DA","./Image/2.png");
+
+
+
 #if ALARM
 	//设置报警回调函数
     NET_DVR_SetDVRMessageCallBack_V31(MessageCallback, NULL);

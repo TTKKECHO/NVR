@@ -1,29 +1,38 @@
-[2021-05-31 15:39:23.068][INF] The COM:HCCoreBase ver is 6.1.4.15, 2020_03_05. Async:1.
-[2021-05-31 15:39:23.068][INF] The COM:Core ver is 6.1.6.4, 2020_12_31. Async:1.
-[2021-05-31 15:39:23.068][INF] This HCNetSDK ver is 6.1.6.4 Ver 2020_12_31.
-[2021-05-31 15:39:23.068][INF] Login dev 192.168.0.32:8000.
-[2021-05-31 15:39:23.068][INF] dwTotalNum[2048]
-[2021-05-31 15:39:23.074][INF] Private connect 192.168.0.32:8000 sock=37 this=0xeaff2d64 cmd=0x10000 port=59110
-[2021-05-31 15:39:23.074][INF] LogonDev1 in[192.168.0.32:8000]
-[2021-05-31 15:39:23.075][DBG] CCoreGlobalCtrlBase::LoadDSo, HPR_LoadDSo Succ, Path[/home/xinke03/Hk/Test/lib/libcrypto.so], hHandleRet[-352334864]
-[2021-05-31 15:39:23.075][DBG] CCoreGlobalCtrlBase::LoadDSo, HPR_LoadDSo Succ, Path[/home/xinke03/Hk/Test/lib/libssl.so], hHandleRet[-352333648]
-[2021-05-31 15:39:23.075][INF] SSLTRANSAPI::LoadAPI, libeay, Load Real Path[/home/xinke03/Hk/Test/lib/libcrypto.so]
-[2021-05-31 15:39:23.075][INF] SSLTRANSAPI::LoadAPI, libssl, Load Real Path[/home/xinke03/Hk/Test/lib/libssl.so]
-[2021-05-31 15:39:23.075][ERR] SSLTRANSAPI::IsAllAPILoaded, OpenSSL_version Unload
-[2021-05-31 15:39:23.075][ERR] OpenSSL, Not All Function Loaded!
-[2021-05-31 15:39:23.075][INF] SSLTRANSAPI::PrintVersion, SSLeay_version info [OpenSSL 1.0.2t  10 Sep 2019]
-[2021-05-31 15:39:23.075][INF] CSSLTrans::SSLCtxInit, dwSSLVersion[0], m_fnClientMethodV23
-[2021-05-31 15:39:23.121][DBG] CComBase::Load, Load szDllPath[/home/xinke03/Hk/Test/lib/HCNetSDKCom/libHCAlarm.so] SUCC
-[2021-05-31 15:39:23.121][INF] AbilityAnalyze---Init-- start
-[2021-05-31 15:39:23.121][DBG] AbilityAnalyze---Init-- over, DeviceList path [/home/xinke03/Hk/Test/lib/HCNetSDKCom/LocalXml/DeviceList.xml], load result[0]
-[2021-05-31 15:39:23.121][INF] The COM:HCAlarm ver is 6.1.6.4, 2020_12_31.
-[2021-05-31 15:39:23.124][INF] Private connect 192.168.0.32:8000 sock=37 this=0xeaff2d64 cmd=0x111021 port=59112
-[2021-05-31 15:39:29.479][INF] Alarm[0] IP[192.168.0.32] data_len[2003] alarm_len[2003] status[153]
-[2021-05-31 15:39:32.414][INF] Alarm[0] IP[192.168.0.32] data_len[2592] alarm_len[2592] status[153]
-[2021-05-31 15:39:38.802][INF] Alarm[0] IP[192.168.0.32] data_len[2589] alarm_len[2589] status[153]
-[2021-05-31 15:39:38.802][INF] Alarm[0] IP[192.168.0.32] data_len[1877] alarm_len[1877] status[153]
-[2021-05-31 15:39:38.802][INF] Alarm[0] IP[192.168.0.32] data_len[1878] alarm_len[1878] status[153]
-[2021-05-31 15:39:47.912][INF] Alarm[0] IP[192.168.0.32] data_len[2386] alarm_len[2386] status[153]
-[2021-05-31 15:39:51.600][INF] Alarm[0] IP[192.168.0.32] data_len[2007] alarm_len[2007] status[153]
-[2021-05-31 15:39:51.601][INF] Alarm[0] IP[192.168.0.32] data_len[1874] alarm_len[1874] status[153]
-[2021-05-31 15:39:51.601][INF] Alarm[0] IP[192.168.0.32] data_len[1877] alarm_len[1877] status[153]
+[2021-06-02 15:34:44.336][INF] The COM:HCCoreBase ver is 6.1.4.15, 2020_03_05. Async:1.
+[2021-06-02 15:34:44.336][INF] The COM:Core ver is 6.1.6.4, 2020_12_31. Async:1.
+[2021-06-02 15:34:44.336][INF] This HCNetSDK ver is 6.1.6.4 Ver 2020_12_31.
+[2021-06-02 15:34:44.336][INF] Login dev 192.168.0.32:8000.
+[2021-06-02 15:34:44.336][INF] dwTotalNum[2048]
+[2021-06-02 15:34:44.338][INF] Private connect 192.168.0.32:8000 sock=36 this=0xaba77d64 cmd=0x10000 port=39706
+[2021-06-02 15:34:44.338][INF] LogonDev1 in[192.168.0.32:8000]
+[2021-06-02 15:34:44.339][DBG] CCoreGlobalCtrlBase::LoadDSo, HPR_LoadDSo Succ, Path[/home/xinke03/Hk/Test/lib/libcrypto.so], hHandleRet[-1415046160]
+[2021-06-02 15:34:44.339][DBG] CCoreGlobalCtrlBase::LoadDSo, HPR_LoadDSo Succ, Path[/home/xinke03/Hk/Test/lib/libssl.so], hHandleRet[-1415044944]
+[2021-06-02 15:34:44.339][INF] SSLTRANSAPI::LoadAPI, libeay, Load Real Path[/home/xinke03/Hk/Test/lib/libcrypto.so]
+[2021-06-02 15:34:44.339][INF] SSLTRANSAPI::LoadAPI, libssl, Load Real Path[/home/xinke03/Hk/Test/lib/libssl.so]
+[2021-06-02 15:34:44.339][ERR] SSLTRANSAPI::IsAllAPILoaded, OpenSSL_version Unload
+[2021-06-02 15:34:44.339][ERR] OpenSSL, Not All Function Loaded!
+[2021-06-02 15:34:44.339][INF] SSLTRANSAPI::PrintVersion, SSLeay_version info [OpenSSL 1.0.2t  10 Sep 2019]
+[2021-06-02 15:34:44.339][INF] CSSLTrans::SSLCtxInit, dwSSLVersion[0], m_fnClientMethodV23
+[2021-06-02 15:34:44.389][DBG] CComBase::Load, Load szDllPath[/home/xinke03/Hk/Test/lib/HCNetSDKCom/libHCVoiceTalk.so] SUCC
+[2021-06-02 15:34:44.390][INF] AbilityAnalyze---Init-- start
+[2021-06-02 15:34:44.390][DBG] AbilityAnalyze---Init-- over, DeviceList path [/home/xinke03/Hk/Test/lib/HCNetSDKCom/LocalXml/DeviceList.xml], load result[0]
+[2021-06-02 15:34:44.390][INF] The COM:VoiceTalk ver is 6.1.6.4, 2020_12_31.
+[2021-06-02 15:34:44.390][DBG] CComBase::Load, Load szDllPath[/home/xinke03/Hk/Test/lib/HCNetSDKCom/libHCGeneralCfgMgr.so] SUCC
+[2021-06-02 15:34:44.390][INF] The COM:HCGeneralCfgMgr ver is 6.1.6.4, 2020_12_31.
+[2021-06-02 15:34:44.391][DBG] CComBase::Load, Load szDllPath[/home/xinke03/Hk/Test/lib/HCNetSDKCom/libHCPlayBack.so] SUCC
+[2021-06-02 15:34:44.391][INF] The COM:HCPlayback ver is 6.1.6.4, 2020_12_31.
+[2021-06-02 15:34:44.391][DBG] CComBase::Load, Load szDllPath[/home/xinke03/Hk/Test/lib/HCNetSDKCom/libHCIndustry.so] SUCC
+[2021-06-02 15:34:44.391][INF] The COM:HCIndustry ver is 6.1.6.4, 2020_12_31.
+[2021-06-02 15:34:44.391][DBG] CComBase::Load, Load szDllPath[/home/xinke03/Hk/Test/lib/HCNetSDKCom/libHCDisplay.so] SUCC
+[2021-06-02 15:34:44.391][INF] The COM:HCDisplay ver is 6.1.6.4, 2020_12_31.
+[2021-06-02 15:34:44.391][DBG] CComBase::Load, Load szDllPath[/home/xinke03/Hk/Test/lib/HCNetSDKCom/libHCPreview.so] SUCC
+[2021-06-02 15:34:44.391][INF] The COM:Preview ver is 6.1.6.4, 2020_12_31.
+[2021-06-02 15:34:44.391][DBG] CComBase::Load, Load szDllPath[/home/xinke03/Hk/Test/lib/HCNetSDKCom/libHCAlarm.so] SUCC
+[2021-06-02 15:34:44.392][INF] The COM:HCAlarm ver is 6.1.6.4, 2020_12_31.
+[2021-06-02 15:34:44.394][INF] Private connect 192.168.0.32:8000 sock=36 this=0xaba77d64 cmd=0x117002 port=39708
+[2021-06-02 15:34:44.404][DBG] SimpleSTDCommandToDvr with out cmd[POST /ISAPI/Intelligent/FDLib/FDSearch], input size[338], max segment length[8388608]
+[2021-06-02 15:34:44.407][INF] Private connect 192.168.0.32:8000 sock=36 this=0xaba77d64 cmd=0x110040 port=39710
+[2021-06-02 15:34:44.412][INF] COM_Logout[0][0]
+[2021-06-02 15:34:44.419][DBG] CUserMgr::UnRegisterHeartProxy[0]
+[2021-06-02 15:34:44.421][INF] Private connect 192.168.0.32:8000 sock=36 this=0xaba77d64 cmd=0x10100 port=39712
+[2021-06-02 15:34:44.425][INF] CTransUnitMgr::UnloadTransUnitLib

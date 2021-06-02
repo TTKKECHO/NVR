@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string.h>
 #include <iconv.h>
+#include <time.h>
+#include <sys/time.h>
 
 using namespace std;
 
@@ -85,4 +87,81 @@ void charToUChar(char* str_char,unsigned char* str_uchar,int length)
         str_char++;
 	}
     return;
+}
+
+
+std::string getLocalTime(int type)
+{
+    std::string result;
+    time_t now;
+    tm *info;
+    time(&now);
+    info = localtime(&now);
+    char time_sec[14];
+    strftime(time_sec,14,"%Y%m%d%H%M%S",info);
+    timeval tv;
+    gettimeofday(&tv,NULL);
+    switch(type)
+    {
+        case SEC:
+        { 
+            result = std::string(time_sec);
+        }
+        break;
+        case MSEC:
+        {
+            char time_msec[18];
+            sprintf(time_msec,"%s.%ld",time_sec,tv.tv_usec/1000);
+            result = std::string(time_msec);
+        }
+        break;
+        case USEC:
+        {
+            char time_usec[21];
+            sprintf(time_usec,"%s.%ld",time_sec,tv.tv_usec);
+            result = std::string(time_usec);
+
+        }
+        break;
+        default:break;
+    }  
+    return result;
+
+}
+
+std::string getTimeStamp(int type )
+{
+    std::string result;
+    timeval tv;
+    gettimeofday(&tv,NULL);
+    switch(type)
+    {
+        case SEC:
+        { 
+            char time_sec[10];
+            sprintf(time_sec,"%ld",tv.tv_sec);
+            result = std::string(time_sec);
+        }
+        break;
+        case MSEC:
+        {
+            char time_msec[13];
+            sprintf(time_msec,"%ld",tv.tv_sec*1000+tv.tv_usec/1000);
+            result = std::string(time_msec);
+        }
+        break;
+        case USEC:
+        {
+            char time_usec[16];
+            sprintf(time_usec,"%ld",tv.tv_sec*1000000+tv.tv_usec);
+            result = std::string(time_usec);
+
+        }
+        break;
+        default:break;
+    }  
+    return result;
+
+
+
 }
