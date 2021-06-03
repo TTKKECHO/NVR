@@ -2,14 +2,168 @@
 #include "Common.h"
 #include <time.h>
 #include <unistd.h>
-#include <libxml2/libxml/xmlmemory.h>
-#include <libxml2/libxml/parser.h>
-#include <libxml2/libxml/tree.h>
+
 
 using namespace std;
 
+
+xmlBufferPtr get_facelib_appenddata(Json::Value jsObject)
+{    
+    xmlDocPtr doc = xmlNewDoc(BAD_CAST "1.0");  //定义文档和节点指针
+    
+    //创建一个root节点，设置其内容和属性，然后加入根结点
+    xmlNodePtr root_node = xmlNewNode(NULL,BAD_CAST "FaceAppendData"); 
+    xmlNewProp(root_node,BAD_CAST "version",BAD_CAST "2.0");    
+    xmlNewProp(root_node,BAD_CAST "xmlns",BAD_CAST "http://www.hikvision.com/ver20/XMLSchema");
+    
+    xmlDocSetRootElement(doc,root_node);        //设置根节点
+    
+    xmlNodePtr son_node;
+    xmlNodePtr content;
+    xmlNodePtr grandson;
+    xmlNodePtr great_grandson;
+    
+    //创建 bornTime 节点
+    //<!--opt, xs:ISO8601 time,出生日期,例如:2014-12-12T00:00:00Z--> 
+    son_node = xmlNewNode(NULL,BAD_CAST "bornTime");
+    content = xmlNewText(BAD_CAST jsObject["bornTime"].asString().c_str());
+
+    //content = xmlNewText(BAD_CAST "2000-01-01T00:00:00Z");
+    xmlAddChild(son_node,content);
+    xmlAddChild(root_node,son_node);
+
+    //创建 name 节点
+    //<!--req,xs:string,姓名--> 
+    son_node = xmlNewNode(NULL,BAD_CAST "name");
+    content = xmlNewText(BAD_CAST jsObject["name"].asString().c_str());
+    //content = xmlNewText(BAD_CAST "赵敏");
+    xmlAddChild(son_node,content);
+    xmlAddChild(root_node,son_node);
+
+    //创建 sex 节点
+    //<!--opt,xs:string,"male,female",性别--> 
+    son_node = xmlNewNode(NULL,BAD_CAST "sex");
+    content = xmlNewText(BAD_CAST jsObject["sex"].asString().c_str());
+
+    //content = xmlNewText(BAD_CAST "female");
+    xmlAddChild(son_node,content);
+    xmlAddChild(root_node,son_node);
+
+    //创建 province 节点
+    //<!--opt,xs:string,省份,代码索引具体请参考"全国各省份城市列表"--> 
+    son_node = xmlNewNode(NULL,BAD_CAST "province");
+    content = xmlNewText(BAD_CAST "31");
+    xmlAddChild(son_node,content);
+    xmlAddChild(root_node,son_node);
+    
+    //创建 city 节点
+    //<!--opt,xs:string,城市,代码索引具体请参考"全国各省份城市列表"--> 
+    son_node = xmlNewNode(NULL,BAD_CAST "city");
+    content = xmlNewText(BAD_CAST "01");
+    xmlAddChild(son_node,content);
+    xmlAddChild(root_node,son_node);
+
+    //创建 certificateType 节点
+    //<!--opt,xs:string,"officerID,ID,passportID,other", 证件类型: OfficerID-军官证, ID-身份证, passportID-护照, other-其他--> 
+    son_node = xmlNewNode(NULL,BAD_CAST "certificateType");
+    content = xmlNewText(BAD_CAST "ID");
+    xmlAddChild(son_node,content);
+    xmlAddChild(root_node,son_node);
+
+    //创建 certificateNumber 节点
+    //<!--dep,xs:string,"证件号"--> 
+    son_node = xmlNewNode(NULL,BAD_CAST "certificateNumber");
+    content = xmlNewText(BAD_CAST "310115200001011689");
+    xmlAddChild(son_node,content);
+    xmlAddChild(root_node,son_node);
+    
+    //PersonInfoExtendList 
+    //自定义标签1：在人脸库中定义
+    son_node = xmlNewNode(NULL,BAD_CAST "PersonInfoExtendList ");  
+    xmlNewProp(son_node,BAD_CAST "size",BAD_CAST "3");     
+    xmlAddChild(root_node,son_node);
+    
+    //自定义标签1：在人脸库中定义，序号1
+    grandson = xmlNewNode(NULL, BAD_CAST "PersonInfoExtend");    
+    xmlAddChild(son_node,grandson);
+      
+    great_grandson = xmlNewNode(NULL,BAD_CAST "id");
+    content = xmlNewText(BAD_CAST "1");
+    xmlAddChild(great_grandson,content);
+    xmlAddChild(grandson,great_grandson);
+    
+    great_grandson = xmlNewNode(NULL,BAD_CAST "enable");
+    content = xmlNewText(BAD_CAST "true");
+    xmlAddChild(great_grandson,content);
+    xmlAddChild(grandson,great_grandson);
+    
+    great_grandson = xmlNewNode(NULL,BAD_CAST "name");
+   // content = xmlNewText(BAD_CAST "项目");
+    content = xmlNewText(BAD_CAST jsObject["PersonInfoExtendList"][1]["name"].asString().c_str());
+
+    xmlAddChild(great_grandson,content);
+    xmlAddChild(grandson,great_grandson);
+    
+    great_grandson = xmlNewNode(NULL,BAD_CAST "value");
+    content = xmlNewText(BAD_CAST "杨高路改造");
+    xmlAddChild(great_grandson,content);
+    xmlAddChild(grandson,great_grandson);
+    
+    //自定义标签1：在人脸库中定义，序号1
+    grandson = xmlNewNode(NULL, BAD_CAST "PersonInfoExtend");    
+    xmlAddChild(son_node,grandson);
+    
+    great_grandson = xmlNewNode(NULL,BAD_CAST "id");
+    content = xmlNewText(BAD_CAST "2");
+    xmlAddChild(great_grandson,content);
+    xmlAddChild(grandson,great_grandson);
+    
+    great_grandson = xmlNewNode(NULL,BAD_CAST "enable");
+    content = xmlNewText(BAD_CAST "true");
+    xmlAddChild(great_grandson,content);
+    xmlAddChild(grandson,great_grandson);
+    
+    great_grandson = xmlNewNode(NULL,BAD_CAST "name");
+    content = xmlNewText(BAD_CAST "标段");
+    xmlAddChild(great_grandson,content);
+    xmlAddChild(grandson,great_grandson);
+    
+    great_grandson = xmlNewNode(NULL,BAD_CAST "value");
+    content = xmlNewText(BAD_CAST "1标");
+    xmlAddChild(great_grandson,content);
+    xmlAddChild(grandson,great_grandson);
+    
+    //创建 phoneNumber 节点
+    // <!--opt,xs:string, 电话号码-->
+    son_node = xmlNewNode(NULL,BAD_CAST "phoneNumber");
+    content = xmlNewText(BAD_CAST "18630827788");
+    xmlAddChild(son_node,content);
+    xmlAddChild(root_node,son_node);
+    
+    //创建 customHumanID 节点
+    // <!--opt,xs:string,"自定义人员ID"--> 
+    // son_node = xmlNewNode(NULL,BAD_CAST "customHumanID");
+    // content = xmlNewText(BAD_CAST "xk-yg-lq-001");
+    // xmlAddChild(son_node,content);
+    // xmlAddChild(root_node,son_node);
+              
+    xmlKeepBlanksDefault(0);
+    
+    xmlBufferPtr buffer = xmlBufferCreate();
+    xmlNodeDump(buffer, doc, root_node, 0, 1);
+       
+    //xmlBufferFree(buffer); 
+
+    //释放文档内节点动态申请的内存
+    xmlFreeDoc(doc);
+
+    return buffer;
+}
+
+
+
 //FDID: EE96E5C51DE14E3EA22ABA2FED01E5DA
-int add_face(long lUserID,std::string FDID,std::string filepath)
+int add_face(long lUserID,std::string FDID,std::string filepath,Json::Value jsObject)
 {	
     //step 1:NET_DVR_UploadFile_V40
     std::string filename;
@@ -70,24 +224,35 @@ int add_face(long lUserID,std::string FDID,std::string filepath)
     struImageInfo.dwSendDataLen = length;
     
     printf("%s:%ld,%d\n",filepath.c_str(),length,struImageInfo.dwSendDataLen); 
-    filename +=".xml";
-    printf("filename:%s\n", filename.c_str()); 
+    // filename +=".xml";
+    // printf("filename:%s\n", filename.c_str()); 
 
-    pFile = fopen(filename.c_str(), "rb");
-    if (pFile == NULL)
-    {
-        return FALSE;
-    }
+    // pFile = fopen(filename.c_str(), "rb");
+    // if (pFile == NULL)
+    // {
+    //     return FALSE;
+    // }
    
-    //curpos = ftell(pFile);
-    fseek(pFile, 0L, SEEK_END);
-    length = ftell(pFile);
-    fseek(pFile, 0L, SEEK_SET);
+    // //curpos = ftell(pFile);
+    // fseek(pFile, 0L, SEEK_END);
+    // length = ftell(pFile);
+    // fseek(pFile, 0L, SEEK_SET);
     
+    // BYTE *pSendAppendData = new BYTE[length];
+    // memset(pSendAppendData, 0, length);
+    // fread(pSendAppendData, length, 1, pFile);
+    // fclose(pFile);
+    
+    // struImageInfo.pSendAppendData = pSendAppendData;
+    // struImageInfo.dwSendAppendDataLen = length;
+    
+    xmlBufferPtr xmlAppenddata = get_facelib_appenddata(jsObject);  
+    length = xmlStrlen(xmlAppenddata->content);
     BYTE *pSendAppendData = new BYTE[length];
     memset(pSendAppendData, 0, length);
-    fread(pSendAppendData, length, 1, pFile);
-    fclose(pFile);
+    memcpy(pSendAppendData, xmlAppenddata->content, length);
+    //printf("%s\n%d\n",xmlAppenddata->content);
+    xmlBufferFree(xmlAppenddata);
     
     struImageInfo.pSendAppendData = pSendAppendData;
     struImageInfo.dwSendAppendDataLen = length;

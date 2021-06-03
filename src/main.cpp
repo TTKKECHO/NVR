@@ -1,7 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <stdbool.h> 
+#include <thread>
 #include <jsoncpp/json/json.h>
+// #include <jsoncpp/json/reader.h>
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -13,17 +15,14 @@
 #include "base64.h"
 #include "alarm.h"
 #include "facelib.h"
+#include "background.h"
 // #include <curl/curl.h>
 // #include <curl/easy.h>
-
 using namespace std;
+
 
 int main()
 {
-
-
-
-
 /************************声明变量************************/
     NET_DVR_USER_LOGIN_INFO LoginInfo  = {0};					//设备登录参数
     NET_DVR_DEVICEINFO_V40  DeviceInfo = {0};					//设备信息
@@ -66,16 +65,28 @@ int main()
         NET_DVR_Cleanup();
         return HPR_ERROR;
     }
-	
+
+	//创建报警布防线程与网络通信线程
+	thread alarm(thread_ALARM,user_id);
+	thread web(thread_WEB,user_id);
+	alarm.join();
+	web.join();
 
 
 	//cout<<now<<endl;
 	//get_FDLibList(user_id);
 	//get_FDLib(user_id,"EE96E5C51DE14E3EA22ABA2FED01E5DA"); 
-	get_FDLibPics(user_id,"EE96E5C51DE14E3EA22ABA2FED01E5DA");
-	//add_face(user_id,"EE96E5C51DE14E3EA22ABA2FED01E5DA","./Image/2.png");
+	// get_FDLibPics(user_id,"EE96E5C51DE14E3EA22ABA2FED01E5DA");
+
+	// add_face(user_id,"EE96E5C51DE14E3EA22ABA2FED01E5DA","./Image/2.png",jsObject);
 
 
+    // NET_DVR_Logout(user_id);
+    // NET_DVR_Cleanup();
+	
+	
+	
+	return 0;
 
 #if ALARM
 	//设置报警回调函数

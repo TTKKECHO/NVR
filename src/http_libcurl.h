@@ -45,8 +45,6 @@ public:
     void connectTimeOut(int time);
     void recvTimeOut(int time);
 
-
-
 };
 
 void http_init(long type = CURL_GLOBAL_DEFAULT);
