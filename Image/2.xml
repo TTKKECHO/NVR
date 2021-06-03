@@ -6,7 +6,7 @@
 <city>02</city>
 <certificateType>ID</certificateType>
 <certificateNumber>330115200001011689</certificateNumber>
-<PersonInfoExtendList>
+<PersonInfoExtendList size="3">
 <PersonInfoExtend>
 <id>1</id>
 <enable>true</enable>
@@ -19,6 +19,13 @@
 <name>标段</name>
 <value>1标</value>
 </PersonInfoExtend>
+<PersonInfoExtend>
+<id>3</id>
+<enable>true</enable>
+<name>标段</name>
+<value>xk-yg-lq-008</value>
+</PersonInfoExtend>
 </PersonInfoExtendList>
 <phoneNumber>18247568978</phoneNumber>
+<customHumanID min="0" max="64"> xk-yg-lq-008</customHumanID> 
 </FaceAppendData>  
