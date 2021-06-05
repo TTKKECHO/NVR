@@ -361,6 +361,7 @@ int get_FDLib_capabilities(long lUserID)
 } 
 
 //xml
+/*
 int xml()
 {    
     xmlChar *result = NULL;
@@ -466,7 +467,7 @@ int testxml()
     xmlNodeDump(buffer, doc, root_node, 0, 1);
     
     printf("%s\n", buffer->content);
-/*
+
     xmlDocDumpFormatMemoryEnc(doc, &result, &size, "UTF-8", 1);
 
     int nRel = xmlSaveFile("CreateXml.xml",doc);
@@ -474,13 +475,15 @@ int testxml()
     {
         printf("一个xml文档被创建，写入%d个字节\n", nRel);
     }
-*/
+
     //释放文档内节点动态申请的内存
+    
     xmlFreeDoc(doc);
 
     return 1;
 }
 
+*/
 //查询指定人脸库人员
 //<PID>1CB25CF5D84642139EEFF90FA287678B</PID>
 int get_FDLibPics(long lUserID,char *FDID)
@@ -662,4 +665,5 @@ int returnFileType(std::string filepath)
     if(filetype == "gif" || filetype == "GIF") return GIF;
     if(filetype == "swf" || filetype == "SWF") return SWF;
     if(filetype == "xml" || filetype == "XML") return XML;
+    return -1;
 }

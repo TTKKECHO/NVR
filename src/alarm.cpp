@@ -3,6 +3,24 @@
 
 BOOL CALLBACK MessageCallback(LONG lCommand, NET_DVR_ALARMER *pAlarmer, char *pAlarmInfo, DWORD dwBufLen, void* pUser)
 {
+
+
+
+
+        std::string sdata;
+		std::cout<<"发送："<<std::endl;
+		std::cin>>sdata;
+		amqp_bytes_t message_bytes = amqp_cstring_bytes(sdata.c_str());
+
+		amqp_basic_properties_t properties;
+		printf("\nflag:3\n");
+
+		properties._flags = 0;
+
+		properties._flags |= AMQP_BASIC_DELIVERY_MODE_FLAG;
+		properties.delivery_mode = AMQP_DELIVERY_NONPERSISTENT;
+	    amqp_basic_publish(state,2,amqp_cstring_bytes("topicExchange"),amqp_cstring_bytes("world"),1,0,&properties,message_bytes);
+
     std::cout<<"报警："<<lCommand<<std::endl;
     switch(lCommand) 
     {       
@@ -87,7 +105,7 @@ BOOL CALLBACK MessageCallback(LONG lCommand, NET_DVR_ALARMER *pAlarmer, char *pA
                 char cFilename[256] = {0};
                 char chTime[128];
                 sprintf(chTime,"%4.4d%2.2d%2.2d%2.2d%2.2d%2.2d",struAbsTime.dwYear,struAbsTime.dwMonth,struAbsTime.dwDay,struAbsTime.dwHour,struAbsTime.dwMinute,struAbsTime.dwSecond);
-
+                
                 sprintf(cFilename, "FaceSnapBackPic[%s][%s].jpg",struFaceSnap.struDevInfo.struDevIP.sIpV4, chTime);
                 std::fstream imgFile;
                 imgFile.open("Image/test2.jpg",std::ios::out|std::ios::binary);

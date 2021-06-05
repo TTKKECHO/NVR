@@ -4,7 +4,7 @@
 #include "HCNetSDK.h"
 #include "Common.h"
 #include "http_libcurl.h"
-#include "alarm.h"
+#include "rabbitmq.h"
 
 //时间解析宏定义
 #define GET_YEAR(_time_)      (((_time_)>>26) + 2000) 

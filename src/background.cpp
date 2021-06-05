@@ -3,7 +3,15 @@
 #include <jsoncpp/json/json.h>
 
 
-
+/**
+ * @Description：\brief 设备报警处理函数
+ * @Author:liuguang
+ * @Date:2021/05/27 
+ * @Param:
+ *      \param  [in] user_id: 设备登录ID
+ * @return： 
+ *      \returns [int] 0为失败
+ */
 int thread_ALARM(long user_id)
 {
     printf("进入报警布防线程...\n");
@@ -27,13 +35,14 @@ int thread_ALARM(long user_id)
     while(true)
     {
         sleep(50000); //等待过程中，如果设备上传报警信息，在报警回调函数里面接收和处理报警信息
-        //撤销布防上传通道
-        if (!NET_DVR_CloseAlarmChan_V30(lHandle))
-        {
-            printf("NET_DVR_CloseAlarmChan_V30 error, %d\n", NET_DVR_GetLastError());
-            return 0;
-        }
     }
+    //撤销布防上传通道
+    if (!NET_DVR_CloseAlarmChan_V30(lHandle))
+    {
+        printf("NET_DVR_CloseAlarmChan_V30 error, %d\n", NET_DVR_GetLastError());
+        return 0;
+    }
+    
 }
 
 

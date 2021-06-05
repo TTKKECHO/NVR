@@ -9,10 +9,16 @@
 using namespace std;
 
 
+
+
 /**
- * @Description：打印设备SDK版本信息
+ * @Description：\brief 打印设备SDK版本信息
  * @Author:liuguang
- * @Date:2021/05/27
+ * @Date:2021/05/27 
+ * @Param:
+ *      \param  [NULL]
+ * @return： 
+ *      \returns [NULL]
  */
 void Demo_SDK_Version()
 {
@@ -28,16 +34,17 @@ void Demo_SDK_Version()
 }
 
 
-/**
- * @Description：GBK转UTF8
+/** 
+ * @Description：\brief GBK转UTF8
  * @Author:liuguang
  * @Date:2021/05/24
  * @Param:
- *      gbkdata：GBK数据指针
- *      len_gbk：GBK数据长度
- *      utfdata：UTF8数据指针
- *      len_utf：UTF8数据长度（GBK数据长度+2）
- * @return:0为成功，-1为失败
+ *      \param [in] gbkdata：GBK数据指针
+ *      \param [in] len_gbk：GBK数据长度
+ *      \param [in] utfdata：UTF8数据指针
+ *      \param [in] len_utf：UTF8数据长度（GBK数据长度+2）
+ * @return： 
+ *      \returns [int] 0为成功，-1为失败
  */
 int GBK_TO_UTF8(char *gbkdata,size_t len_gbk,char *utfdata,size_t len_utf)
 {
@@ -56,12 +63,13 @@ int GBK_TO_UTF8(char *gbkdata,size_t len_gbk,char *utfdata,size_t len_utf)
 }
 
 /**
- * @Description：获取图片在设备内的名称
+ * @Description：\brief 获取图片在设备内的名称
  * @Author:liuguang
  * @Date:2021/05/24
  * @Param:
- *     buffer：硬盘录像机返回的包含图片url的数据
- * @return:图片名称
+ *     \param [in] buffer：硬盘录像机返回的包含图片url的数据
+ * @return： 
+ *      \returns   [string] 图片名称
  */
 std::string ReturnFileName(BYTE *buffer)
 {
@@ -78,6 +86,17 @@ std::string ReturnFileName(BYTE *buffer)
     return result;
 }
 
+/**
+ * @Description：\brief char 转 uchar (可能没用)
+ * @Author:liuguang
+ * @Date:2021/05/31
+ * @Param:
+ *      \param [in] str_char ：char指针
+ *      \param [in] str_uchar ：uchar指针
+ *      \param [in] length ：字符串长度
+ * @return： 
+ *      \returns NULL
+ */
 void charToUChar(char* str_char,unsigned char* str_uchar,int length)
 {
 	for (int i = 0;  i < length; i++) 
@@ -89,7 +108,15 @@ void charToUChar(char* str_char,unsigned char* str_uchar,int length)
     return;
 }
 
-
+/**
+ * @Description：\brief 获取本地时间
+ * @Author:liuguang
+ * @Date:2021/05/31
+ * @Param:
+ *      \param [in] type ：返回时间类型，SEC到秒，MSEC毫秒，USEC微秒
+ * @return： 
+ *      \returns [string] 时间，格式 YYYYMMDDHHMMSS(mmuu)
+ */
 std::string getLocalTime(int type)
 {
     std::string result;
@@ -129,6 +156,16 @@ std::string getLocalTime(int type)
 
 }
 
+
+/**
+ * @Description：\brief 获取时间戳
+ * @Author:liuguang
+ * @Date:2021/05/31
+ * @Param:
+ *      \param [in] type ：返回时间类型，SEC到秒，MSEC毫秒，USEC微秒
+ * @return： 
+ *      \returns [string] 时间戳
+ */
 std::string getTimeStamp(int type )
 {
     std::string result;
@@ -164,4 +201,97 @@ std::string getTimeStamp(int type )
 
 
 
+}
+
+
+/**
+ * @Description：\brief 获取配置文件内容
+ * @Author:liuguang
+ * @Date:2021/05/31
+ * @Param:
+ *      \param [NULL]
+ * @return： 
+ *      \returns [Json::Value] 配置文件内容
+ */
+Json::Value getConfig()
+{
+    Json::Reader jsreader;
+	Json::Value jsObject;
+
+	ifstream f;
+	f.open("./src/config.json",ios::in|ios::out);
+    if(!f.is_open()){return jsObject;}
+    if(!jsreader.parse(f,jsObject,false)){return jsObject;}
+    f.close();
+    return jsObject;
+	
+}
+
+
+/**
+ * @Description：\brief 设置配置文件内容
+ * @Author:liuguang
+ * @Date:2021/05/31
+ * @Param:
+ *      \param [in] data ：配置文件内容
+ * @return： 
+ *      \returns [int] 0为成功，-1为失败
+ */
+int setConfig(Json::Value data)
+{
+    Json::StyledWriter writer;
+    std::string strdata = writer.write(data);
+    ofstream f;
+	f.open("./src/config.json",ios::in|ios::out);
+    if(!f.is_open()){return -1;}
+    f << strdata;
+    f.close();
+    return 0;
+}
+
+
+/**
+ * @Description：\brief 初始化硬盘录像机
+ * @Author:liuguang
+ * @Date:2021/05/31
+ * @Param:
+ *      \param [in] config ：录像机配置文件内容
+ * @return： 
+ *      \returns [long] 设备登录ID
+ */
+long NVR_Init(Json::Value config)
+{
+    /************************声明变量************************/
+    NET_DVR_USER_LOGIN_INFO LoginInfo  = {0};					//设备登录参数
+    NET_DVR_DEVICEINFO_V40  DeviceInfo = {0};					//设备信息
+	NET_DVR_COMPRESSIONCFG_V30 device_compression = {0};
+	LONG user_id;
+	
+	//load LoginInfo
+	LoginInfo.bUseAsynLogin = false;
+    LoginInfo.wPort = config["port"].asInt();
+    memcpy(LoginInfo.sDeviceAddress, config["device_ip"].asCString(), NET_DVR_DEV_ADDRESS_MAX_LEN);
+    memcpy(LoginInfo.sUserName,config["username"].asCString() , NAME_LEN);
+    memcpy(LoginInfo.sPassword, config["password"].asCString(), NAME_LEN);
+	
+/************************Start************************/
+	printf("Device Initialization...\n");
+	//设备初始化，设置超时、重连时间
+	NET_DVR_Init();
+	NET_DVR_SetConnectTime(2000,1);
+	NET_DVR_SetReconnect(10000,true);
+	//获取设备sdk版本号
+    Demo_SDK_Version();
+	//设置日志
+    NET_DVR_SetLogToFile(3, (char*)"./sdkLog");
+    //注册设备
+    user_id = NET_DVR_Login_V40(&LoginInfo, &DeviceInfo);
+    if (user_id < 0)
+    {
+        printf("Login error, %d\n", NET_DVR_GetLastError());
+        printf("Press any key to quit...\n");
+        NET_DVR_Cleanup();
+        return HPR_ERROR;
+    }
+    return user_id;
 }

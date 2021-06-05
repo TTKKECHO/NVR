@@ -1,0 +1,24 @@
+[
+   {
+      "device_ip" : "192.168.0.32",
+      "username" : "admin",
+      "password" : "211aAT518",
+      "port" : "8000",
+      "face_lib":""
+   },
+   {
+      "server_url":"www.liuguang.space",
+      "port":"5672",
+      "vhost":"/",
+      "exchange":"topicExchange",
+      "recv_queue":"topic.first",
+      "upload_queue" : "topic.second",
+      "username" : "admin",
+      "password" : "admin"
+   },
+   {  
+       "项目":"",
+       "标段":"",
+       "device_id":""
+   }
+]
