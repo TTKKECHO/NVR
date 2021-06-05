@@ -10,8 +10,8 @@
       "server_url":"www.liuguang.space",
       "port":"5672",
       "vhost":"/",
-      "exchange":"topicExchange",
-      "recv_queue":"topic.first",
+      "exchange":"amq.topic",
+      "recv_queue":"teat",
       "upload_queue" : "topic.second",
       "username" : "admin",
       "password" : "admin"
