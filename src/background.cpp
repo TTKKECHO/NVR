@@ -73,9 +73,15 @@ int thread_WEB(long user_id)
 	printf("\n通信线程异常关闭\n");
     return 0;
 	//std::cout<<"xml:"<<std::endl<<get_facelib_appenddata(jsObject)->content<<std::endl;
+}
 
 
-
-
-
+int thread_RAMQ(amqp_connection_state_t state)
+{
+    printf("\n建立网络连接通道...\n");
+    Json::Value config = getConfig();
+    RAMQ request(state);
+	request.set(config[1],QUEUE_RECV);
+	request.receive();
+	return 0;
 }

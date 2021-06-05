@@ -145,25 +145,18 @@ void  RAMQ::receive()
         amqp_envelope_t envelope;
         struct timeval timeout = {5, 0};
 		reply = amqp_basic_get(state,CH_RECV,amqp_cstring_bytes(queue.c_str()),false);
-        //std::cout<<"reply:"<<reply.reply_type<<std::endl;
-		//std::cout<<"reply:"<<reply.reply.id<<std::endl;
 		if(reply.reply_type==AMQP_RESPONSE_NORMAL && reply.reply.id!=AMQP_BASIC_GET_EMPTY_METHOD)
         {
-            std::cout<<"haha"<<std::endl;
             amqp_read_message(state,CH_RECV,&mes,0);
-            std::cout<<"haha2"<<std::endl;
             char *body = new char[mes.body.len+1];
-            std::cout<<"haha3"<<std::endl;
             memcpy(body, mes.body.bytes, mes.body.len);
             body[mes.body.len]='\0';
             response = std::string(body);
-            printf("body:%s\n",body);
+            printf("response:%s\n",response.c_str());
             amqp_destroy_message(&mes);
             method = reply.reply;
             s = (amqp_basic_ack_t*)method.decoded;
             int flag =1;
-            //printf("输入flag：");
-           // std::cin>>flag;
             if(flag == 1)amqp_basic_ack(state,CH_RECV,s->delivery_tag,false);
         }
 	}
