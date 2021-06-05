@@ -1,5 +1,0 @@
-<FaceAppendData version="2.0" xmlns="http://www.isapi.org/ver20/XMLSchema"> 
-  <name> 
-    小李子
-  </name> 
-</FaceAppendData>  
