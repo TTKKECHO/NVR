@@ -30,6 +30,16 @@ amqp_connection_state_t state;
 
 int main()
  {
+
+
+	Json::Value config1 = getConfig();
+	state = RAMQ_Init(config1[1]);
+	RAMQ request(state);
+	request.set(config1[1],QUEUE_RECV);
+	request.receive();
+	return 0;
+
+
 // 	amqp_connection_state_t mq;
 // 	int socket = amqp_open_socket("www.liuguang.space",5672);
 // 	amqp_set_sockfd(mq,socket);
