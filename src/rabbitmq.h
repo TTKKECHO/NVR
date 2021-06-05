@@ -23,21 +23,31 @@ enum CHANNEL_TYPE
     CH_RECV
 };
 
+enum QUEUE_TYPE
+{
+    QUEUE_UPLOAD=0,
+    QUEUE_RECV
+};
+
 class RAMQ
 {
 private:
     amqp_connection_state_t state;
     amqp_bytes_t exchange;
     std::string exchange_type;
-    std::string key;
-    amqp_bytes_t queue;
+    amqp_bytes_t key;
+    std::string queue;
 public:
-    std::string data;
     std::string message;
+    std::string response;
+    amqp_rpc_reply_t reply;
 public:
-    RAMQ();
+    RAMQ(amqp_connection_state_t connect_state);
     ~RAMQ();
-    
+    void set(Json::Value config,int type);
+    void publish(std::string data);
+    void receive();
+
 };
 
 amqp_connection_state_t RAMQ_Init(Json::Value config);
