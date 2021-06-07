@@ -1,20 +1,24 @@
-[2021-06-03 17:40:47.993][INF] The COM:HCCoreBase ver is 6.1.4.15, 2020_03_05. Async:1.
-[2021-06-03 17:40:47.993][INF] The COM:Core ver is 6.1.6.4, 2020_12_31. Async:1.
-[2021-06-03 17:40:47.993][INF] This HCNetSDK ver is 6.1.6.4 Ver 2020_12_31.
-[2021-06-03 17:40:47.993][INF] Login dev 192.168.0.32:8000.
-[2021-06-03 17:40:47.993][INF] dwTotalNum[2048]
-[2021-06-03 17:40:47.997][INF] Private connect 192.168.0.32:8000 sock=36 this=0x357d8114 cmd=0x10000 port=45756
-[2021-06-03 17:40:47.997][INF] LogonDev1 in[192.168.0.32:8000]
-[2021-06-03 17:40:47.997][DBG] CCoreGlobalCtrlBase::LoadDSo, HPR_LoadDSo Succ, Path[/home/xinke03/Hk/Test/lib/libcrypto.so], hHandleRet[897458080]
-[2021-06-03 17:40:47.998][DBG] CCoreGlobalCtrlBase::LoadDSo, HPR_LoadDSo Succ, Path[/home/xinke03/Hk/Test/lib/libssl.so], hHandleRet[897459296]
-[2021-06-03 17:40:47.998][INF] SSLTRANSAPI::LoadAPI, libeay, Load Real Path[/home/xinke03/Hk/Test/lib/libcrypto.so]
-[2021-06-03 17:40:47.998][INF] SSLTRANSAPI::LoadAPI, libssl, Load Real Path[/home/xinke03/Hk/Test/lib/libssl.so]
-[2021-06-03 17:40:47.998][ERR] SSLTRANSAPI::IsAllAPILoaded, OpenSSL_version Unload
-[2021-06-03 17:40:47.998][ERR] OpenSSL, Not All Function Loaded!
-[2021-06-03 17:40:47.998][INF] SSLTRANSAPI::PrintVersion, SSLeay_version info [OpenSSL 1.0.2t  10 Sep 2019]
-[2021-06-03 17:40:47.998][INF] CSSLTrans::SSLCtxInit, dwSSLVersion[0], m_fnClientMethodV23
-[2021-06-03 17:40:48.144][DBG] CComBase::Load, Load szDllPath[/home/xinke03/Hk/Test/lib/HCNetSDKCom/libHCAlarm.so] SUCC
-[2021-06-03 17:40:48.144][INF] AbilityAnalyze---Init-- start
-[2021-06-03 17:40:48.144][DBG] AbilityAnalyze---Init-- over, DeviceList path [/home/xinke03/Hk/Test/lib/HCNetSDKCom/LocalXml/DeviceList.xml], load result[0]
-[2021-06-03 17:40:48.144][INF] The COM:HCAlarm ver is 6.1.6.4, 2020_12_31.
-[2021-06-03 17:40:48.148][INF] Private connect 192.168.0.32:8000 sock=40 this=0x357d8114 cmd=0x111021 port=45758
+[2021-06-07 18:00:24.274][INF] The COM:HCCoreBase ver is 6.1.4.15, 2020_03_05. Async:1.
+[2021-06-07 18:00:24.274][INF] The COM:Core ver is 6.1.6.4, 2020_12_31. Async:1.
+[2021-06-07 18:00:24.274][INF] This HCNetSDK ver is 6.1.6.4 Ver 2020_12_31.
+[2021-06-07 18:00:24.274][INF] Login dev 192.168.0.32:8000.
+[2021-06-07 18:00:24.274][INF] dwTotalNum[2048]
+[2021-06-07 18:00:24.276][INF] Private connect 192.168.0.32:8000 sock=36 this=0x2a6af424 cmd=0x10000 port=60406
+[2021-06-07 18:00:24.276][INF] LogonDev1 in[192.168.0.32:8000]
+[2021-06-07 18:00:24.276][DBG] CCoreGlobalCtrlBase::LoadDSo, HPR_LoadDSo Succ, Path[/home/xinke03/Hk/Test/lib/libcrypto.so], hHandleRet[711692976]
+[2021-06-07 18:00:24.276][DBG] CCoreGlobalCtrlBase::LoadDSo, HPR_LoadDSo Succ, Path[/home/xinke03/Hk/Test/lib/libssl.so], hHandleRet[711694192]
+[2021-06-07 18:00:24.276][INF] SSLTRANSAPI::LoadAPI, libeay, Load Real Path[/home/xinke03/Hk/Test/lib/libcrypto.so]
+[2021-06-07 18:00:24.276][INF] SSLTRANSAPI::LoadAPI, libssl, Load Real Path[/home/xinke03/Hk/Test/lib/libssl.so]
+[2021-06-07 18:00:24.276][ERR] SSLTRANSAPI::IsAllAPILoaded, OpenSSL_version Unload
+[2021-06-07 18:00:24.276][ERR] OpenSSL, Not All Function Loaded!
+[2021-06-07 18:00:24.276][INF] SSLTRANSAPI::PrintVersion, SSLeay_version info [OpenSSL 1.0.2t  10 Sep 2019]
+[2021-06-07 18:00:24.276][INF] CSSLTrans::SSLCtxInit, dwSSLVersion[0], m_fnClientMethodV23
+[2021-06-07 18:00:24.395][DBG] CComBase::Load, Load szDllPath[/home/xinke03/Hk/Test/lib/HCNetSDKCom/libHCAlarm.so] SUCC
+[2021-06-07 18:00:24.395][INF] AbilityAnalyze---Init-- start
+[2021-06-07 18:00:24.395][DBG] AbilityAnalyze---Init-- over, DeviceList path [/home/xinke03/Hk/Test/lib/HCNetSDKCom/LocalXml/DeviceList.xml], load result[0]
+[2021-06-07 18:00:24.395][INF] The COM:HCAlarm ver is 6.1.6.4, 2020_12_31.
+[2021-06-07 18:00:24.396][INF] Private connect 192.168.0.32:8000 sock=40 this=0x2a6af424 cmd=0x111021 port=60410
+[2021-06-07 18:00:30.124][INF] Alarm[0] IP[192.168.0.32] data_len[455021] alarm_len[455021] status[125]
+[2021-06-07 18:00:37.108][INF] Alarm[0] IP[192.168.0.32] data_len[2596] alarm_len[2596] status[153]
+[2021-06-07 18:00:42.797][INF] Alarm[0] IP[192.168.0.32] data_len[141143] alarm_len[141143] status[125]
+[2021-06-07 18:00:46.647][INF] Alarm[0] IP[192.168.0.32] data_len[141797] alarm_len[141797] status[125]
