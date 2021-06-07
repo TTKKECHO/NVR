@@ -115,8 +115,9 @@ std::string getLocalTime(int type)
     tm *info;
     time(&now);
     info = localtime(&now);
-    char time_sec[14];
-    strftime(time_sec,14,"%Y%m%d%H%M%S",info);
+    char time_sec[15];
+    strftime(time_sec,15,"%Y%m%d%H%M%S",info);
+    time_sec[14]='\0';
     timeval tv;
     gettimeofday(&tv,NULL);
     switch(type)
@@ -128,8 +129,9 @@ std::string getLocalTime(int type)
         break;
         case MSEC:
         {
-            char time_msec[18];
-            sprintf(time_msec,"%s.%ld",time_sec,tv.tv_usec/1000);
+            char time_msec[20];
+            sprintf(time_msec,"%14s.%03ld",time_sec,tv.tv_usec/1000);
+            // printf("\n msec:%ld\n",tv.tv_usec);
             result = std::string(time_msec);
         }
         break;
@@ -258,7 +260,7 @@ long NVR_Init(Json::Value config)
 	
 	//load LoginInfo
 	LoginInfo.bUseAsynLogin = false;
-    LoginInfo.wPort = config["port"].asInt();
+    LoginInfo.wPort = atoi(config["port"].asCString());
     memcpy(LoginInfo.sDeviceAddress, config["device_ip"].asCString(), NET_DVR_DEV_ADDRESS_MAX_LEN);
     memcpy(LoginInfo.sUserName,config["username"].asCString() , NAME_LEN);
     memcpy(LoginInfo.sPassword, config["password"].asCString(), NAME_LEN);

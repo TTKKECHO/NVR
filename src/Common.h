@@ -11,6 +11,15 @@
 #define ALARM 0
 #define ADDFACE 0
 
+
+struct DEVICE_INFO
+{
+    std::string device_id;
+    std::string facelib;
+
+};
+
+extern DEVICE_INFO device_info;
 enum TIME_TYPE
 {
     SEC=0,

@@ -83,5 +83,6 @@ int thread_RAMQ(amqp_connection_state_t state)
     RAMQ request(state);
 	request.set(config[1],QUEUE_RECV);
 	request.receive();
+    printf("\n[ERROR]网络通道断开，RAMQ线程退出\n");
 	return 0;
 }

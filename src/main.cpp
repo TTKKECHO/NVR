@@ -23,28 +23,31 @@
 
 using namespace std;
 amqp_connection_state_t state;
+DEVICE_INFO device_info;
+
 
 int main()
  {
 	Json::Value config = getConfig();
-	//long user_id = NVR_Init(config[0]);
+	long user_id = NVR_Init(config[0]);
 	state = RAMQ_Init(config[1]);
-	// if(user_id < 0)
-	// {
-	// 	printf("\n[ERROR]设备初始化失败！\n");
-	// 	return 0;
-	// }
-	// get_FDLib_capabilities(user_id);
+	device_info.device_id=config[2]["device_id"].asString();
+	if(user_id < 0)
+	{
+		printf("\n[ERROR]设备初始化失败！\n");
+		return 0;
+	}
+	get_FDLib_capabilities(user_id);
 
 	//创建报警布防线程与网络通信线程
-	//thread alarm(thread_ALARM,user_id);
+	thread alarm(thread_ALARM,user_id);
 	thread ramq(thread_RAMQ,state);
-	//alarm.join();
+	alarm.join();
 	ramq.join();
 
     //logout
-   // NET_DVR_Logout(user_id);
-   // NET_DVR_Cleanup();
+	NET_DVR_Logout(user_id);
+	NET_DVR_Cleanup();
 	close_and_destroy_connection(state);
 	return 0;
 }

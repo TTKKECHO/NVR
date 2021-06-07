@@ -3,23 +3,8 @@
 
 BOOL CALLBACK MessageCallback(LONG lCommand, NET_DVR_ALARMER *pAlarmer, char *pAlarmInfo, DWORD dwBufLen, void* pUser)
 {
-
-
-
-
-        std::string sdata;
-		std::cout<<"发送："<<std::endl;
-		std::cin>>sdata;
-		amqp_bytes_t message_bytes = amqp_cstring_bytes(sdata.c_str());
-
-		amqp_basic_properties_t properties;
-		printf("\nflag:3\n");
-
-		properties._flags = 0;
-
-		properties._flags |= AMQP_BASIC_DELIVERY_MODE_FLAG;
-		properties.delivery_mode = AMQP_DELIVERY_NONPERSISTENT;
-	    amqp_basic_publish(state,2,amqp_cstring_bytes("topicExchange"),amqp_cstring_bytes("world"),1,0,&properties,message_bytes);
+    Json::Value upload_data;
+    Json::StyledWriter writer;
 
     std::cout<<"报警："<<lCommand<<std::endl;
     switch(lCommand) 
@@ -97,7 +82,6 @@ BOOL CALLBACK MessageCallback(LONG lCommand, NET_DVR_ALARMER *pAlarmer, char *pA
             struAbsTime.dwHour = GET_HOUR(struFaceSnap.dwAbsTime);
             struAbsTime.dwMinute = GET_MINUTE(struFaceSnap.dwAbsTime);
             struAbsTime.dwSecond = GET_SECOND(struFaceSnap.dwAbsTime);
-            std::cout<<"here"<<std::endl;
             //保存抓拍场景图片
             if (struFaceSnap.dwBackgroundPicLen > 0 && struFaceSnap.pBuffer2 != NULL)
             {      
@@ -115,14 +99,19 @@ BOOL CALLBACK MessageCallback(LONG lCommand, NET_DVR_ALARMER *pAlarmer, char *pA
                 imgFile.close();
                 std::string imgdata;
                 imgdata = base64_encode(buffer,struFaceSnap.dwFacePicLen);
-                
-                //发送数据
-                HLC request;
-                request.url = "https://www.liuguang.space:10086/post";
-                request.data="{\"image\":\""+imgdata+"\"}";
-                request.headers("Content-Type:application/json");
-                request.post();
-                printf("response:%s\n",request.response.c_str());
+                //upload_data["image_face"] = imgdata;
+                upload_data["device_id"] = device_info.device_id;
+                upload_data["record_time"] = chTime;
+                // std::string upload_time = getLocalTime(MSEC);
+                upload_data["upload_time"] =getLocalTime(MSEC);
+
+                RAMQ request(state);
+	            Json::Value config = getConfig();
+                request.set(config[1],QUEUE_UPLOAD);
+                std::string data = writer.write(upload_data);
+                //std::cout<<"data:"<<data<<std::endl;
+                request.publish(data);
+              
 
                 imgFile.open("Image/test.jpg",std::ios::out|std::ios::binary);
                 char * buffer2 = new char[struFaceSnap.dwBackgroundPicLen];
