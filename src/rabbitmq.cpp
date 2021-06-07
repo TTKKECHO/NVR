@@ -29,12 +29,12 @@ amqp_connection_state_t RAMQ_Init(Json::Value config)
         AMQP_DEFAULT_HEARTBEAT, AMQP_SASL_METHOD_PLAIN, config["username"].asCString(), config["password"].asCString());
    
     assert(rpc_reply.reply_type == AMQP_RESPONSE_NORMAL);
-
-    amqp_channel_open_ok_t *res = amqp_channel_open(state, CH_RECV);
+    amqp_channel_open_ok_t *res = amqp_channel_open(state, CH_UPLOAD);
     assert(res != NULL);
-    res = amqp_channel_open(state, CH_UPLOAD);
+    res = amqp_channel_open(state, CH_RECV);
     assert(res != NULL);
-    amqp_queue_bind(state,CH_RECV,amqp_cstring_bytes(config["recv_queue"].asCString()),amqp_cstring_bytes(config["exchange"].asCString()),amqp_cstring_bytes("RECV"),amqp_empty_table);
+    
+   // amqp_queue_bind(state,CH_RECV,amqp_cstring_bytes(config["recv_queue"].asCString()),amqp_cstring_bytes(config["exchange"].asCString()),amqp_cstring_bytes("RECV"),amqp_empty_table);
 	amqp_queue_bind(state,CH_UPLOAD,amqp_cstring_bytes(config["upload_queue"].asCString()),amqp_cstring_bytes(config["exchange"].asCString()),amqp_cstring_bytes("UPLOAD"),amqp_empty_table);
     return state;
 }
@@ -44,7 +44,6 @@ amqp_connection_state_t RAMQ_Init(Json::Value config)
  * @brief   RAMQ构造函数
  * @author  liuguang
  * @date    2021/06/05
- * @param   [in] connect_state:链接对象
  * @param   [in] connect_state:链接对象
  * @return  NULL
  */
@@ -75,7 +74,7 @@ RAMQ::~RAMQ()
  */
 void RAMQ::set(Json::Value config,int type)
 {
-    exchange = amqp_cstring_bytes(config["exchange"].asCString());
+    exchange = config["exchange"].asString();
     exchange_type = "topic";
     if(type == QUEUE_UPLOAD)
     {
@@ -112,16 +111,16 @@ void RAMQ:: publish(std::string data)
     while(1)
     {
         times++;
-        res = amqp_basic_publish(state,CH_UPLOAD,exchange,key,1,0,&properties,amqp_cstring_bytes(message.c_str()));
+        res = amqp_basic_publish(state,CH_UPLOAD,amqp_cstring_bytes(exchange.c_str()),amqp_cstring_bytes("UPLOAD"),1,0,&properties,amqp_cstring_bytes(data.c_str()));
         if(res == AMQP_STATUS_OK || times == 100)
         {
             break;
         }
-
     }
     if(res != AMQP_STATUS_OK) printf("\n[ERROR]发送失败，请检查网络状态\n");
     switch(res)
     {
+        case AMQP_STATUS_OK:printf("\n发送成功\n");break;
         case AMQP_STATUS_TIMER_FAILURE : printf("\n系统计时器设施返回错误，消息未被发送。\n");break;
         case AMQP_STATUS_HEARTBEAT_TIMEOUT : printf("\n等待broker的心跳连接超时，消息未被发送\n");break;
         case AMQP_STATUS_NO_MEMORY : printf("\n属性中的table太大而不适合单个框架，消息未被发送\n");break;
@@ -129,7 +128,7 @@ void RAMQ:: publish(std::string data)
         case AMQP_STATUS_CONNECTION_CLOSED : printf("\n连接被关闭。\n");break;
         case AMQP_STATUS_SSL_ERROR : printf("\n发生SSL错误。\n");break;
         case AMQP_STATUS_TCP_ERROR : printf("\n发生TCP错误，errno或WSAGetLastError\n");break;
-        default : printf("\n未知错误\n");break;
+        default : printf("\n[ERROR]发送失败，请检查网络状态\n");break;
     }
 }
 

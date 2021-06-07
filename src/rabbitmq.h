@@ -33,7 +33,7 @@ class RAMQ
 {
 private:
     amqp_connection_state_t state;
-    amqp_bytes_t exchange;
+    std::string exchange;
     std::string exchange_type;
     amqp_bytes_t key;
     std::string queue;
