@@ -12,13 +12,13 @@
       "vhost":"/",
       "exchange":"amq.topic",
       "recv_queue":"teat",
-      "upload_queue" : "topic.second",
+      "upload_queue" : "teat",
       "username" : "admin",
       "password" : "admin"
    },
    {  
        "项目":"",
        "标段":"",
-       "device_id":""
+       "device_id":"test01"
    }
 ]
