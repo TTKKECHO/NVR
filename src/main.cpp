@@ -8,8 +8,6 @@
 #include <unistd.h>
 #include "Common.h"
 #include "HCNetSDK.h"
-#include "CapPicture.h"
-#include "PTZControl.h"
 #include "http_libcurl.h"
 #include "base64.h"
 #include "alarm.h"
@@ -29,6 +27,7 @@ DEVICE_INFO device_info;
 int main()
  {
 	Json::Value config = getConfig();
+	Json::Value test;
 	long user_id = NVR_Init(config[0]);
 	state = RAMQ_Init(config[1]);
 	device_info.device_id=config[2]["device_id"].asString();
@@ -44,7 +43,10 @@ int main()
 	thread ramq(thread_RAMQ,state);
 	alarm.join();
 	ramq.join();
-
+	while(1)
+	{
+		
+	}
     //logout
 	NET_DVR_Logout(user_id);
 	NET_DVR_Cleanup();
