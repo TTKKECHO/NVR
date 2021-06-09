@@ -1,7 +1,54 @@
 #include "rabbitmq.h"
 #include <iostream>
 #include <string>
+#include <stdlib.h>
+#include <unistd.h>
 
+
+
+
+/** 
+ * @brief   RAMQ构造函数
+ * @author  liuguang
+ * @date    2021/06/05
+ * @param   [in] connect_state:链接对象
+ * @return  NULL
+ */
+RAMQ::RAMQ(std::string server_url,int server_port)
+{
+    state = amqp_new_connection();
+    amqp_socket_t *socket = amqp_tcp_socket_new(state);
+    assert(socket);
+    url = server_url;
+    port = server_port;
+    int rc = amqp_socket_open(socket, server_url.c_str(), server_port);
+    assert(rc == AMQP_STATUS_OK);
+}
+
+ RAMQ::RAMQ(Json::Value config)
+ {
+    state = amqp_new_connection();
+    amqp_socket_t *socket = amqp_tcp_socket_new(state);
+    assert(socket);
+    url = config["server_url"].asString();
+    port = atoi(config["server_port"].asCString());
+    int rc = amqp_socket_open(socket, url.c_str(),port);
+    assert(rc == AMQP_STATUS_OK);
+ }
+
+
+/** 
+ * @brief   RAMQ析构函数
+ * @author  liuguang
+ * @date    2021/06/05
+ * @param   NULL
+ * @return  NULL
+ */
+
+RAMQ::~RAMQ()
+{
+    close_and_destroy_connection(state);
+}
 
 
 /** 
@@ -40,57 +87,61 @@ amqp_connection_state_t RAMQ_Init(Json::Value config)
 }
 
 
-/** 
- * @brief   RAMQ构造函数
- * @author  liuguang
- * @date    2021/06/05
- * @param   [in] connect_state:链接对象
- * @return  NULL
- */
-RAMQ::RAMQ(amqp_connection_state_t connect_state):state(connect_state)
+int RAMQ::connect(std::string host,std::string usrname,std::string pwd,int channel_Max,int frame_size,int heartbeat,amqp_sasl_method_enum sasl_method)
 {
+    reply = amqp_login(state,host.c_str(), channel_Max,frame_size,heartbeat, sasl_method,usrname.c_str(), pwd.c_str());
+    assert(reply.reply_type == AMQP_RESPONSE_NORMAL);
+    vhost = host;
+    channel_max = channel_Max;
+    username =usrname;
+    password = pwd;
 
 }
 
-/** 
- * @brief   RAMQ析构函数
- * @author  liuguang
- * @date    2021/06/05
- * @param   NULL
- * @return  NULL
- */
-RAMQ::~RAMQ()
+
+int RAMQ::connect(int frame_size,int heartbeat,amqp_sasl_method_enum sasl_method)
 {
-	
+    reply = amqp_login(state,vhost.c_str(), channel_max,frame_size,heartbeat, sasl_method,username.c_str(), password.c_str());
+    assert(reply.reply_type == AMQP_RESPONSE_NORMAL);
 }
 
-/** 
- * @brief   RAMQ析构函数
- * @author  liuguang
- * @date    2021/06/05
- * @param   [in] config:设置参数
- * @param   [in] type:
- * @return  NULL
- */
-void RAMQ::set(Json::Value config,int type)
+int RAMQ::connect(Json::Value config,int frame_size,int heartbeat,amqp_sasl_method_enum sasl_method)
 {
-    exchange = config["exchange"].asString();
-    exchange_type = "topic";
-    if(type == QUEUE_UPLOAD)
-    {
-        queue = config["upload_queue"].asString();
-        key = amqp_cstring_bytes("UPLOAD");
-        }
-    else if (type == QUEUE_RECV)
-    {
-        queue = config["recv_queue"].asString();
+    vhost = config["vhost"].asString();
+    channel_max = std::atoi(config["channel_max"].asCString());
+    username =config["usrname"].asString();
+    password = config["password"].asString();
+    reply = amqp_login(state,vhost.c_str(), channel_max,frame_size,heartbeat, sasl_method,username.c_str(), password.c_str());
+    assert(reply.reply_type == AMQP_RESPONSE_NORMAL);
+}
+
+void RAMQ::open_channel(int channel_id)
+{
+    if(channel_id>channel_max){printf("\n[ERROR]超出最大通道数量\n");};
+    amqp_channel_open_ok_t *res =  amqp_channel_open(state,channel_id);
+    assert(res != NULL);
+}
+//     exchange = config["exchange"].asString();
+//     exchange_type = "topic";
+//     if(type == QUEUE_UPLOAD)
+//     {
+//         queue = config["upload_queue"].asString();
+//         key = amqp_cstring_bytes("UPLOAD");
+//         }
+//     else if (type == QUEUE_RECV)
+//     {
+//         queue = config["recv_queue"].asString();
         
-        key = amqp_cstring_bytes("RECV");
-        }
-    else
-        {printf("\n[ERROR]查无此type\n");return;}  
+//         key = amqp_cstring_bytes("RECV");
+//         }
+//     else
+//         {printf("\n[ERROR]查无此type\n");return;}  
     
-}
+// }
+
+
+
+
 
 /** 
  * @brief   发送消息
@@ -141,23 +192,7 @@ void  RAMQ::receive()
     printf("\n [START]\n");
     while(1)
 	{
-        amqp_envelope_t envelope;
-        struct timeval timeout = {5, 0};
-		reply = amqp_basic_get(state,CH_RECV,amqp_cstring_bytes(queue.c_str()),false);
-		if(reply.reply_type==AMQP_RESPONSE_NORMAL && reply.reply.id!=AMQP_BASIC_GET_EMPTY_METHOD)
-        {
-            amqp_read_message(state,CH_RECV,&mes,0);
-            char *body = new char[mes.body.len+1];
-            memcpy(body, mes.body.bytes, mes.body.len);
-            body[mes.body.len]='\0';
-            response = std::string(body);
-            printf("response:%s\n",response.c_str());
-            amqp_destroy_message(&mes);
-            method = reply.reply;
-            s = (amqp_basic_ack_t*)method.decoded;
-            int flag =1;
-            if(flag == 1)amqp_basic_ack(state,CH_RECV,s->delivery_tag,false);
-        }
+          
 	}
 }
 

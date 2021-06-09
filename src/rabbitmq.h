@@ -33,18 +33,35 @@ class RAMQ
 {
 private:
     amqp_connection_state_t state;
+    std::string username;
+    std::string password;
+public:
+    int port;
+    int channel_max;
+    std::string url;
+    std::string vhost;
     std::string exchange;
     std::string exchange_type;
-    amqp_bytes_t key;
-    std::string queue;
-public:
+    std::string key;
+    std::string upload_queue;
+    std::string recv_queue;
     std::string message;
     std::string response;
     amqp_rpc_reply_t reply;
 public:
-    RAMQ(amqp_connection_state_t connect_state);
+    RAMQ(std::string server_url,int server_port = AMQP_PROTOCOL_PORT);
+    RAMQ(Json::Value config);
     ~RAMQ();
-    void set(Json::Value config,int type);
+    int connect(std::string host,std::string usrname,std::string pwd,int channel_Max = 2,int frame_size =AMQP_DEFAULT_FRAME_SIZE,int heartbeat = AMQP_DEFAULT_HEARTBEAT,amqp_sasl_method_enum sasl_method = AMQP_SASL_METHOD_PLAIN);
+    int connect(int frame_size =AMQP_DEFAULT_FRAME_SIZE,int heartbeat = AMQP_DEFAULT_HEARTBEAT,amqp_sasl_method_enum sasl_method = AMQP_SASL_METHOD_PLAIN);
+    int connect(Json::Value config,int frame_size =AMQP_DEFAULT_FRAME_SIZE,int heartbeat = AMQP_DEFAULT_HEARTBEAT,amqp_sasl_method_enum sasl_method = AMQP_SASL_METHOD_PLAIN);
+    void declare_exchange(std::string name,std::string type);
+    void declare_queue(std::string name);
+    void queue_bind();
+    void open_channel(int channel_id);
+    void setUsername(std::string usrname);
+    void setPassword(std::string pwd);
+    
     void publish(std::string data);
     void receive();
 

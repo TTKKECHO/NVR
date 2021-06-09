@@ -5,6 +5,7 @@ BOOL CALLBACK MessageCallback(LONG lCommand, NET_DVR_ALARMER *pAlarmer, char *pA
 {
     Json::Value upload_data;
     Json::StyledWriter writer;
+    //Json::Reader reader;
 
     std::cout<<"报警："<<lCommand<<std::endl;
     switch(lCommand) 
@@ -12,6 +13,7 @@ BOOL CALLBACK MessageCallback(LONG lCommand, NET_DVR_ALARMER *pAlarmer, char *pA
         
         case COMM_SNAP_MATCH_ALARM: //人脸比对结果信息
         {
+            printf("\n人脸比对报警\n");
             char chTime[128];
             NET_VCA_FACESNAP_MATCH_ALARM struFaceMatchAlarm = {0};
             memcpy(&struFaceMatchAlarm, pAlarmInfo, sizeof(NET_VCA_FACESNAP_MATCH_ALARM));
@@ -50,11 +52,24 @@ BOOL CALLBACK MessageCallback(LONG lCommand, NET_DVR_ALARMER *pAlarmer, char *pA
         
          case COMM_VCA_ALARM: //智能检测通用报警
         {
+            printf("\n智能检测通用报警\n");
+
             if(pAlarmInfo == NULL)
             {
                 return FALSE;                
             }
-            printf("智能检测通用报警, Json数据内容：%s\n", pAlarmInfo);
+           // printf("智能检测通用报警, Json数据内容：%s\n", pAlarmInfo);
+            Json::Value jsdata;
+            // if(!reader.parse(pAlarmInfo,jsdata,false)){return FALSE;}
+            // std::string strdata = writer.write(jsdata);
+            // printf("\njsdata:%s\n",strdata.c_str());
+
+
+
+
+
+        return TRUE;
+
         }
         break;
 
@@ -73,6 +88,10 @@ BOOL CALLBACK MessageCallback(LONG lCommand, NET_DVR_ALARMER *pAlarmer, char *pA
 
         case COMM_UPLOAD_FACESNAP_RESULT: //人脸抓拍报警信息
         {
+            printf("\n人脸抓拍报警信息\n");
+            //upload_data["device_id"] = device_info.device_id;
+
+
             NET_VCA_FACESNAP_RESULT struFaceSnap = {0};
             memcpy(&struFaceSnap, pAlarmInfo, sizeof(NET_VCA_FACESNAP_RESULT));
             NET_DVR_TIME struAbsTime = {0};
@@ -89,35 +108,33 @@ BOOL CALLBACK MessageCallback(LONG lCommand, NET_DVR_ALARMER *pAlarmer, char *pA
                 char cFilename[256] = {0};
                 char chTime[128];
                 sprintf(chTime,"%4.4d%2.2d%2.2d%2.2d%2.2d%2.2d",struAbsTime.dwYear,struAbsTime.dwMonth,struAbsTime.dwDay,struAbsTime.dwHour,struAbsTime.dwMinute,struAbsTime.dwSecond);
-                
+
                 sprintf(cFilename, "FaceSnapBackPic[%s][%s].jpg",struFaceSnap.struDevInfo.struDevIP.sIpV4, chTime);
-                std::fstream imgFile;
-                imgFile.open("Image/test2.jpg",std::ios::out|std::ios::binary);
                 char * buffer = new char[struFaceSnap.dwFacePicLen];
+
                 memcpy(buffer,struFaceSnap.pBuffer1,struFaceSnap.dwFacePicLen);
-                imgFile.write(buffer,struFaceSnap.dwFacePicLen);
-                imgFile.close();
-                std::string imgdata;
-                imgdata = base64_encode(buffer,struFaceSnap.dwFacePicLen);
+                std::string imgdata = base64_encode(buffer,struFaceSnap.dwFacePicLen);
+
+                char * backbuffer = new char[struFaceSnap.dwBackgroundPicLen];
+                memcpy(backbuffer,struFaceSnap.pBuffer2,struFaceSnap.dwBackgroundPicLen);
+                std::string backImgdata = base64_encode(backbuffer,struFaceSnap.dwBackgroundPicLen);
+                char * rect = new char[24];
+                sprintf(rect,"%1.3f,%1.3f,%1.3f,%1.3f",struFaceSnap.struRect.fX,struFaceSnap.struRect.fY,struFaceSnap.struRect.fHeight,struFaceSnap.struRect.fWidth);
+               // rect[23]= '\0';
+                std::string face_rect(rect);
                 //upload_data["image_face"] = imgdata;
+                //upload_data["image_back"] = backImgdata;
                 upload_data["device_id"] = device_info.device_id;
                 upload_data["record_time"] = chTime;
-                // std::string upload_time = getLocalTime(MSEC);
                 upload_data["upload_time"] =getLocalTime(MSEC);
+                upload_data["face_rect"] = face_rect;
+
 
                 RAMQ request(state);
 	            Json::Value config = getConfig();
                 request.set(config[1],QUEUE_UPLOAD);
                 std::string data = writer.write(upload_data);
-                //std::cout<<"data:"<<data<<std::endl;
                 request.publish(data);
-              
-
-                imgFile.open("Image/test.jpg",std::ios::out|std::ios::binary);
-                char * buffer2 = new char[struFaceSnap.dwBackgroundPicLen];
-                memcpy(buffer2,struFaceSnap.pBuffer2,struFaceSnap.dwBackgroundPicLen);
-                imgFile.write(buffer2,struFaceSnap.dwBackgroundPicLen);
-                imgFile.close();
         
 
             }
