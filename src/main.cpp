@@ -16,6 +16,7 @@
 #include <amqp.h>
 #include <amqp_framing.h>
 #include "rabbitmq.h"
+#include "deviceExtend.h"
 
 
 
@@ -26,10 +27,9 @@ DEVICE_INFO device_info;
 
 int main()
  {
+	
 	Json::Value config = getConfig();
-	Json::Value test;
 	long user_id = NVR_Init(config[0]);
-	state = RAMQ_Init(config[1]);
 	device_info.device_id=config[2]["device_id"].asString();
 	if(user_id < 0)
 	{
@@ -37,19 +37,16 @@ int main()
 		return 0;
 	}
 	get_FDLib_capabilities(user_id);
+	CapImg(user_id,33);
 
 	//创建报警布防线程与网络通信线程
-	thread alarm(thread_ALARM,user_id);
-	thread ramq(thread_RAMQ,state);
-	alarm.join();
+	//thread alarm(thread_ALARM,user_id);
+	thread ramq(thread_RAMQ,user_id);
+	//alarm.join();
 	ramq.join();
-	while(1)
-	{
-		
-	}
+
     //logout
 	NET_DVR_Logout(user_id);
 	NET_DVR_Cleanup();
-	close_and_destroy_connection(state);
 	return 0;
 }
