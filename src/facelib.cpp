@@ -173,7 +173,6 @@ int add_face(long lUserID,std::string FDID,std::string filepath,Json::Value jsOb
 	char fdid[NET_SDK_MAX_FDID_LEN];
     sprintf(fdid,"%s",FDID.c_str());
     printf("%s\n",FDID.c_str());
-
 	struInput.dwSize = sizeof(struInput);
 	memcpy(struInput.szFDID,fdid,NET_SDK_MAX_FDID_LEN);
 	struInput.byConcurrent = 0;
