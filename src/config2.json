@@ -1,0 +1,39 @@
+[
+   {
+      "device_ip" : "192.168.0.32",
+      "face_lib" : "",
+      "password" : "211aAT518",
+      "port" : "8000",
+      "username" : "admin"
+   },
+   {
+      "channel_max" : "2",
+      "exchange" : "amq.topic",
+      "password" : "admin",
+      "recv_queue" : "teat",
+      "server_port" : "5672",
+      "server_url" : "www.liuguang.space",
+      "upload_queue" : "teat",
+      "username" : "admin",
+      "vhost" : "/"
+   },
+   {
+      "device_id" : "test0d",
+      "标段" : "",
+      "项目" : ""
+   },
+   {
+      "header" : {
+         "messageId" : "20210608140755",
+         "name" : "device.loginfo",
+         "namespace" : "xinke.device.setconfig"
+      },
+      "payload" : {
+         "device_id" : "test03",
+         "device_ip" : "192.168.0.32",
+         "password" : "211aAT518",
+         "port" : "8000",
+         "username" : "admin"
+      }
+   }
+]
