@@ -1,4 +1,5 @@
 #include "background.h"
+#include "deviceExtend.h"
 #include <unistd.h>
 #include <jsoncpp/json/json.h>
 
@@ -76,13 +77,34 @@ int thread_WEB(long user_id)
 }
 
 
-int thread_RAMQ(amqp_connection_state_t state)
+int thread_RAMQ(long user_id)
 {
+    Json::Value message;
+    Json::Reader reader;
     printf("\n建立网络连接通道...\n");
+    int status=0;
     Json::Value config = getConfig();
-    RAMQ request(state);
-	request.set(config[1],QUEUE_RECV);
-	request.receive();
+    RAMQ request(config[1]);
+	request.connect(config[1]);
+    request.open_channel(CH_RECV);
+    request.recv_queue = config[1]["recv_queue"].asString();
+	while(1)
+    {
+        status = request.receive();
+        if(status == RAMQ_OK)
+        {
+            if(reader.parse(request.response,message))
+            {
+                std::cout<<"hell"<<std::endl;
+                selectFun(message,user_id);
+                
+            }
+            request.ack();
+           
+        }
+
+    }
+    
     printf("\n[ERROR]网络通道断开，RAMQ线程退出\n");
 	return 0;
 }

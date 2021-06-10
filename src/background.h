@@ -8,5 +8,5 @@
 
 int thread_ALARM(long user_id);
 int thread_WEB(long user_id);
-int thread_RAMQ(amqp_connection_state_t state);
+int thread_RAMQ(long user_id);
 #endif
