@@ -130,11 +130,11 @@ BOOL CALLBACK MessageCallback(LONG lCommand, NET_DVR_ALARMER *pAlarmer, char *pA
                 upload_data["face_rect"] = face_rect;
 
 
-                RAMQ request(state);
-	            Json::Value config = getConfig();
-                request.set(config[1],QUEUE_UPLOAD);
-                std::string data = writer.write(upload_data);
-                request.publish(data);
+                // RAMQ request(state);
+	            // Json::Value config = getConfig();
+                // request.set(config[1],QUEUE_UPLOAD);
+                // std::string data = writer.write(upload_data);
+                // request.publish(data);
         
 
             }
