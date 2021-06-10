@@ -37,6 +37,8 @@ std::string getTimeStamp(int type = SEC);
 std::string getLocalTime(int type = SEC);
 long NVR_Init(Json::Value config);
 
+        
+       
 
 
 

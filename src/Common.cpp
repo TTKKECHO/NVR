@@ -233,7 +233,7 @@ int setConfig(Json::Value data)
     Json::StyledWriter writer;
     std::string strdata = writer.write(data);
     ofstream f;
-	f.open("./src/config.json",ios::in|ios::out);
+	f.open("./src/config2.json",ios::in|ios::out);
     if(!f.is_open()){return -1;}
     f << strdata;
     f.close();
@@ -286,3 +286,5 @@ long NVR_Init(Json::Value config)
     }
     return user_id;
 }
+
+
