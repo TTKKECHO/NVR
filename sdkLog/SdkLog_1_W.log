@@ -1,25 +1,21 @@
-[2021-06-08 11:26:20.451][INF] The COM:HCCoreBase ver is 6.1.4.15, 2020_03_05. Async:1.
-[2021-06-08 11:26:20.451][INF] The COM:Core ver is 6.1.6.4, 2020_12_31. Async:1.
-[2021-06-08 11:26:20.451][INF] This HCNetSDK ver is 6.1.6.4 Ver 2020_12_31.
-[2021-06-08 11:26:20.451][INF] Login dev 192.168.0.32:8000.
-[2021-06-08 11:26:20.451][INF] dwTotalNum[2048]
-[2021-06-08 11:26:20.453][INF] Private connect 192.168.0.32:8000 sock=36 this=0x23fc5424 cmd=0x10000 port=46306
-[2021-06-08 11:26:20.453][INF] LogonDev1 in[192.168.0.32:8000]
-[2021-06-08 11:26:20.453][DBG] CCoreGlobalCtrlBase::LoadDSo, HPR_LoadDSo Succ, Path[/home/xinke03/Hk/Test/lib/libcrypto.so], hHandleRet[603779760]
-[2021-06-08 11:26:20.454][DBG] CCoreGlobalCtrlBase::LoadDSo, HPR_LoadDSo Succ, Path[/home/xinke03/Hk/Test/lib/libssl.so], hHandleRet[603780976]
-[2021-06-08 11:26:20.454][INF] SSLTRANSAPI::LoadAPI, libeay, Load Real Path[/home/xinke03/Hk/Test/lib/libcrypto.so]
-[2021-06-08 11:26:20.454][INF] SSLTRANSAPI::LoadAPI, libssl, Load Real Path[/home/xinke03/Hk/Test/lib/libssl.so]
-[2021-06-08 11:26:20.454][ERR] SSLTRANSAPI::IsAllAPILoaded, OpenSSL_version Unload
-[2021-06-08 11:26:20.454][ERR] OpenSSL, Not All Function Loaded!
-[2021-06-08 11:26:20.454][INF] SSLTRANSAPI::PrintVersion, SSLeay_version info [OpenSSL 1.0.2t  10 Sep 2019]
-[2021-06-08 11:26:20.454][INF] CSSLTrans::SSLCtxInit, dwSSLVersion[0], m_fnClientMethodV23
-[2021-06-08 11:26:20.716][DBG] CComBase::Load, Load szDllPath[/home/xinke03/Hk/Test/lib/HCNetSDKCom/libHCAlarm.so] SUCC
-[2021-06-08 11:26:20.717][INF] AbilityAnalyze---Init-- start
-[2021-06-08 11:26:20.717][DBG] AbilityAnalyze---Init-- over, DeviceList path [/home/xinke03/Hk/Test/lib/HCNetSDKCom/LocalXml/DeviceList.xml], load result[0]
-[2021-06-08 11:26:20.718][INF] The COM:HCAlarm ver is 6.1.6.4, 2020_12_31.
-[2021-06-08 11:26:20.720][INF] Private connect 192.168.0.32:8000 sock=40 this=0x23fc5424 cmd=0x111021 port=46310
-[2021-06-08 11:26:21.732][INF] Alarm[0] IP[192.168.0.32] data_len[104689] alarm_len[104689] status[125]
-[2021-06-08 11:26:27.688][INF] Alarm[0] IP[192.168.0.32] data_len[657180] alarm_len[657180] status[125]
-[2021-06-08 11:26:27.718][INF] Alarm[0] IP[192.168.0.32] data_len[2604] alarm_len[2604] status[153]
-[2021-06-08 11:26:27.719][INF] Alarm[0] IP[192.168.0.32] data_len[2601] alarm_len[2601] status[153]
-[2021-06-08 11:26:28.599][INF] Alarm[0] IP[192.168.0.32] data_len[686326] alarm_len[686326] status[125]
+[2021-06-10 18:36:59.738][INF] The COM:HCCoreBase ver is 6.1.4.15, 2020_03_05. Async:1.
+[2021-06-10 18:36:59.738][INF] The COM:Core ver is 6.1.6.4, 2020_12_31. Async:1.
+[2021-06-10 18:36:59.738][INF] This HCNetSDK ver is 6.1.6.4 Ver 2020_12_31.
+[2021-06-10 18:36:59.738][INF] Login dev 192.168.0.32:8000.
+[2021-06-10 18:36:59.738][INF] dwTotalNum[2048]
+[2021-06-10 18:36:59.740][INF] Private connect 192.168.0.32:8000 sock=36 this=0xdb821b94 cmd=0x10000 port=51624
+[2021-06-10 18:36:59.740][INF] LogonDev1 in[192.168.0.32:8000]
+[2021-06-10 18:36:59.740][DBG] CCoreGlobalCtrlBase::LoadDSo, HPR_LoadDSo Succ, Path[/home/xinke03/Hk/Test/lib/libcrypto.so], hHandleRet[-612189664]
+[2021-06-10 18:36:59.740][DBG] CCoreGlobalCtrlBase::LoadDSo, HPR_LoadDSo Succ, Path[/home/xinke03/Hk/Test/lib/libssl.so], hHandleRet[-612188448]
+[2021-06-10 18:36:59.740][INF] SSLTRANSAPI::LoadAPI, libeay, Load Real Path[/home/xinke03/Hk/Test/lib/libcrypto.so]
+[2021-06-10 18:36:59.740][INF] SSLTRANSAPI::LoadAPI, libssl, Load Real Path[/home/xinke03/Hk/Test/lib/libssl.so]
+[2021-06-10 18:36:59.740][ERR] SSLTRANSAPI::IsAllAPILoaded, OpenSSL_version Unload
+[2021-06-10 18:36:59.740][ERR] OpenSSL, Not All Function Loaded!
+[2021-06-10 18:36:59.741][INF] SSLTRANSAPI::PrintVersion, SSLeay_version info [OpenSSL 1.0.2t  10 Sep 2019]
+[2021-06-10 18:36:59.741][INF] CSSLTrans::SSLCtxInit, dwSSLVersion[0], m_fnClientMethodV23
+[2021-06-10 18:36:59.823][DBG] CComBase::Load, Load szDllPath[/home/xinke03/Hk/Test/lib/HCNetSDKCom/libHCPreview.so] SUCC
+[2021-06-10 18:36:59.823][INF] AbilityAnalyze---Init-- start
+[2021-06-10 18:36:59.823][DBG] AbilityAnalyze---Init-- over, DeviceList path [/home/xinke03/Hk/Test/lib/HCNetSDKCom/LocalXml/DeviceList.xml], load result[0]
+[2021-06-10 18:36:59.823][INF] The COM:Preview ver is 6.1.6.4, 2020_12_31.
+[2021-06-10 18:36:59.823][ERR] COM_CaptureJPEGPicture_NEW [0, 33, 0, -364376688, -364376688, 2073600]
+[2021-06-10 18:36:59.826][INF] Private connect 192.168.0.32:8000 sock=36 this=0xdb821b94 cmd=0x30009 port=51626
