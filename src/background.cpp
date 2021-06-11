@@ -22,7 +22,9 @@ int thread_ALARM(long user_id)
     LONG lHandle;
     NET_DVR_SETUPALARM_PARAM  struAlarmParam={0};
     struAlarmParam.dwSize=sizeof(struAlarmParam);
-	struAlarmParam.byAlarmTypeURL=0;
+	struAlarmParam.byAlarmTypeURL=0<<3;
+	// struAlarmParam.byAlarmTypeURL=0;
+
 	//struAlarmParam.byFaceAlarmDetection = 0;
     //其他报警布防参数不需要设置
 
@@ -77,17 +79,17 @@ int thread_WEB(long user_id)
 }
 
 
-int thread_RAMQ(long user_id)
+int thread_RAMQ()
 {
+
+    Json::Value config= getConfig();
+    RAMQ request;
+	request.setconfig(config[1]);
+    
     Json::Value message;
     Json::Reader reader;
     printf("\n建立网络连接通道...\n");
-    int status=0;
-    Json::Value config = getConfig();
-    RAMQ request(config[1]);
-	request.connect(config[1]);
-    request.open_channel(CH_RECV);
-    request.recv_queue = config[1]["recv_queue"].asString();
+    int status=0;   
 	while(1)
     {
         status = request.receive();
@@ -95,8 +97,13 @@ int thread_RAMQ(long user_id)
         {
             if(reader.parse(request.response,message))
             {
-                std::cout<<"hell"<<std::endl;
-                selectFun(message,user_id);
+                if(!message["header"].isNull())
+                {
+                    selectFun(message);
+                    std::cout<<"message type:"<<message["header"]["name"].asString()<<std::endl;
+                    std::cout<<"messageid:"<<message["header"]["messageId"].asString()<<std::endl;
+                    std::cout<<"name:"<<message["payload"]["name"].asString()<<std::endl;
+                }
                 
             }
             request.ack();
