@@ -16,7 +16,7 @@ struct DEVICE_INFO
 {
     std::string device_id;
     std::string facelib;
-
+    long user_id;
 };
 
 extern DEVICE_INFO device_info;
