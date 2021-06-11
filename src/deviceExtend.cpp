@@ -22,20 +22,20 @@ constexpr unsigned  long  long  operator  ""  _hash( char  const * p,  size_t )
      return  hash_compile_time(p);      
 }
 
-void selectFun(Json::Value message,long user_id)
+void selectFun(Json::Value message)
 {
 	switch(hash_(message["header"]["namespace"].asCString()))
 	{
-		case "xinke.device.query"_hash:		{	selectQueryFun		(message["header"]["name"].asString(),message["payload"],user_id);		}break;
-		case "xinke.device.upload"_hash:	{	selectUploadFun		(message["header"]["name"].asString(),message["payload"],user_id);		}break;
-		case "xinke.device.control"_hash:	{	selectControlFun	(message["header"]["name"].asString(),message["payload"],user_id);		}break;
-		case "xinke.device.setconfig"_hash:	{	selectSetConfigFun	(message["header"]["name"].asString(),message["payload"],user_id);		}break;
+		case "xinke.device.query"_hash:		{	selectQueryFun		(message["header"]["name"].asString(),message["payload"]);		}break;
+		case "xinke.device.upload"_hash:	{	selectUploadFun		(message["header"]["name"].asString(),message["payload"]);		}break;
+		case "xinke.device.control"_hash:	{	selectControlFun	(message["header"]["name"].asString(),message["payload"]);		}break;
+		case "xinke.device.setconfig"_hash:	{	selectSetConfigFun	(message["header"]["name"].asString(),message["payload"]);		}break;
 		default:break;
 	}
 
 }
 
-void selectSetConfigFun(std::string name,Json::Value payload,long user_id)
+void selectSetConfigFun(std::string name,Json::Value payload)
 {
 	switch(hash_(name.c_str()))
 	{
@@ -49,15 +49,15 @@ void selectSetConfigFun(std::string name,Json::Value payload,long user_id)
 
 }
 
-void selectQueryFun(std::string name,Json::Value payload,long user_id)
+void selectQueryFun(std::string name,Json::Value payload)
 {
 
 }
-void selectUploadFun(std::string name,Json::Value payload,long user_id)
+void selectUploadFun(std::string name,Json::Value payload)
 {
 
 }
-void selectControlFun(std::string name,Json::Value payload,long user_id)
+void selectControlFun(std::string name,Json::Value payload)
 {
 
 }
@@ -94,15 +94,17 @@ int setProjectInfo(Json::Value payload)
 
 }
 
-int CapImg(long user_id,int channel)
+int CapImg(int channel)
 {
+	Json::Value message;
+	Json::StyledWriter writer;
 	NET_DVR_JPEGPARA strPicPara = {0};
-    strPicPara.wPicQuality = 2;
+    strPicPara.wPicQuality = 0;
     strPicPara.wPicSize =0;
-	char buffer[1920*1080];
-	LPDWORD size ;
-    bool iRet = NET_DVR_CaptureJPEGPicture_NEW(user_id,channel, &strPicPara, buffer,1920*1080,size);
-    // bool iRet = NET_DVR_CaptureJPEGPicture(user_id,channel, &strPicPara, "./Image/1.jpeg");
+	char buffer[BUFFERSIZE];
+	unsigned int len;
+	LPDWORD size = &len;
+    bool iRet = NET_DVR_CaptureJPEGPicture_NEW(device_info.user_id,channel, &strPicPara, buffer,BUFFERSIZE,size);
 	if (!iRet)
     {
 			printf("\nhere2!\n");
@@ -110,20 +112,20 @@ int CapImg(long user_id,int channel)
         printf("pyd1---NET_DVR_CaptureJPEGPicture error, %d\n", NET_DVR_GetLastError());
         return HPR_ERROR;
     }
-	//int len = (*size);
+	std::cout<<"len:"<<len<<std::endl;
 	std::cout<<sizeof(LPDWORD)<<std::endl;
 	printf("\nhere2!\n");
-	std::string imgdata = base64_encode(buffer,352*288);
-	Json::Value config = getConfig();
-    RAMQ request(config[1]);
-	request.exchange = config[1]["exchange"].asString();
-	request.key=config[1]["key"].asString();
-	request.connect(config[1]);
-    request.open_channel(CH_RECV);
-    request.open_channel(CH_UPLOAD);
-    request.upload_queue = config[1]["upload_queue"].asString();
-	request.message = imgdata ;
-	request.publish(imgdata);
+	std::string imgdata = base64_encode(buffer,len);
+	std::string ts ;
+	ts = base64_decode(imgdata);
+	std::ofstream h;
+	h.open("./Image/now.jpeg");
+	h<<ts;
+	h.close();
+	message["data"] = getLocalTime();
+	message["image"] = imgdata;
+	request.message = writer.write(message);
+	request.publish();
 	return 0;
 }
 

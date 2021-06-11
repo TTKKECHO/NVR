@@ -12,6 +12,8 @@
 #include "base64.h"
 #include "rabbitmq.h"
 
+
+#define BUFFERSIZE 500000
 typedef  std::uint64_t hash_t;  
 constexpr hash_t basis = 0xCBF29CE484222325ull;        
 constexpr hash_t prime = 0x100000001B3ull;         
@@ -21,15 +23,15 @@ constexpr hash_t hash_compile_time( char  const * str, hash_t last_value = basis
 constexpr unsigned  long  long  operator  ""  _hash( char  const * p,  size_t );
 
 
-int CapImg(long lUserID,int channel);
+int CapImg(int channel);
 void zoomin(int lUserID,int channel,int sleep_time=10000);
 void zoomout(int lUserID,int channel,int sleep_time=10000);
 
-void selectFun(Json::Value message,long user_id);
-void selectQueryFun(std::string name,Json::Value payload,long user_id);
-void selectUploadFun(std::string name,Json::Value payload,long user_id);
-void selectControlFun(std::string name,Json::Value payload,long user_id);
-void selectSetConfigFun(std::string name,Json::Value payload,long user_id);
+void selectFun(Json::Value message);
+void selectQueryFun(std::string name,Json::Value payload);
+void selectUploadFun(std::string name,Json::Value payload);
+void selectControlFun(std::string name,Json::Value payload);
+void selectSetConfigFun(std::string name,Json::Value payload);
 
 int setLogInfo(Json::Value payload);
 int setCapture(Json::Value payload);
