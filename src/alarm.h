@@ -15,5 +15,5 @@
 #define GET_SECOND(_time_)    (((_time_)>>0)  & 63)
 
 BOOL CALLBACK MessageCallback(LONG lCommand, NET_DVR_ALARMER *pAlarmer, char *pAlarmInfo, DWORD dwBufLen, void* pUser);
-
+int uploadAlarm(std::string name,Json::Value data);
 #endif

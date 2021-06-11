@@ -5,7 +5,6 @@ BOOL CALLBACK MessageCallback(LONG lCommand, NET_DVR_ALARMER *pAlarmer, char *pA
 {
     Json::Value upload_data;
     Json::StyledWriter writer;
-    //Json::Reader reader;
 
     std::cout<<"报警："<<lCommand<<std::endl;
     switch(lCommand) 
@@ -37,16 +36,26 @@ BOOL CALLBACK MessageCallback(LONG lCommand, NET_DVR_ALARMER *pAlarmer, char *pA
 			char *face_name = (char*)struFaceMatchAlarm.struBlackListInfo.struBlackListInfo.struAttribute.byName;
 			char buffer[255];
 			int c=GBK_TO_UTF8(face_name,strlen(face_name),buffer,strlen(face_name)+2);
+            char * face_buffer = new char[struFaceMatchAlarm.struSnapInfo.dwSnapFacePicLen];
+            std::cout<<"长度："<<struFaceMatchAlarm.struSnapInfo.dwSnapFacePicLen<<std::endl;
+            memcpy(face_buffer,struFaceMatchAlarm.struSnapInfo.pBuffer1,struFaceMatchAlarm.struSnapInfo.dwSnapFacePicLen);
+            std::ofstream f;
+            f.open("./Image/face.jpeg");
+            f<<face_buffer;
+            f.close();
+
+
 			//face_name.assign(face_name2.begin(),face_name2.end());
 			//printf("姓名：%s\r\n",struFaceMatchAlarm.struBlackListInfo.struBlackListInfo.struAttribute.byName);
-			if(!c)printf("姓名1：%s\r\n",buffer);
+			if(!c)printf("姓名：%s\r\n",buffer);
 			//std::cout<<"strlen:"<<struFaceMatchAlarm.dwSnapPicLen<<std::endl<<"buffer:"<<struFaceMatchAlarm.pSnapPicBuffer<<std::endl<<"type:"<<struFaceMatchAlarm.byPicTransType<<std::endl;
             
             std::string str=ReturnFileName(struFaceMatchAlarm.pSnapPicBuffer);
            // cout<<"str:"<<str<<endl;
             NET_DVR_GetPicture(pAlarmer->lUserID,(char *)str.data(),(char*)"./Image/test.jpeg");
             //cout<<"x:"<<struFaceMatchAlarm.struRegion.fX<<endl<<"y:"<<struFaceMatchAlarm.struRegion.fY<<endl<<"width:"<<struFaceMatchAlarm.struRegion.fWidth<<endl<<"height:"<<struFaceMatchAlarm.struRegion.fHeight<<endl;
-            
+            upload_data["name"] = buffer;
+            uploadAlarm("device.face",upload_data);
         }
         break;
         
@@ -122,19 +131,16 @@ BOOL CALLBACK MessageCallback(LONG lCommand, NET_DVR_ALARMER *pAlarmer, char *pA
                 sprintf(rect,"%1.3f,%1.3f,%1.3f,%1.3f",struFaceSnap.struRect.fX,struFaceSnap.struRect.fY,struFaceSnap.struRect.fHeight,struFaceSnap.struRect.fWidth);
                // rect[23]= '\0';
                 std::string face_rect(rect);
-                //upload_data["image_face"] = imgdata;
-                //upload_data["image_back"] = backImgdata;
+                upload_data["image_face"] = imgdata;
+                upload_data["image_background"] = backImgdata;
                 upload_data["device_id"] = device_info.device_id;
                 upload_data["record_time"] = chTime;
                 upload_data["upload_time"] =getLocalTime(MSEC);
                 upload_data["face_rect"] = face_rect;
-
-
-                // RAMQ request(state);
-	            // Json::Value config = getConfig();
-                // request.set(config[1],QUEUE_UPLOAD);
-                // std::string data = writer.write(upload_data);
-                // request.publish(data);
+               // uploadAlarm("device.faceinfo",upload_data);
+               delete []buffer;
+               delete []backbuffer;
+               delete []rect;
         
 
             }
@@ -154,4 +160,24 @@ BOOL CALLBACK MessageCallback(LONG lCommand, NET_DVR_ALARMER *pAlarmer, char *pA
     }
 
     return TRUE;
+}
+
+
+int uploadAlarm(std::string name,Json::Value data)
+{
+    RAMQ upload_ramq;
+    Json::Value config = getConfig();
+    upload_ramq.setconfig(config[1]);
+    Json::Value message;
+    Json::Value header;
+    Json::Value payload;
+    Json::StyledWriter writer;
+    header["namespace"] = "xinke.device.upload";
+    header["name"] = name;
+    header["messageId"] = getLocalTime();
+    payload = data;
+    message["header"]=header;
+    message["payload"]=(payload);
+    std::string message_data = writer.write(message);
+    upload_ramq.publish(message_data);
 }
