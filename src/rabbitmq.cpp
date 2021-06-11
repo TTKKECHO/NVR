@@ -3,6 +3,7 @@
 #include <string>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/socket.h>
 
 
 
@@ -15,9 +16,16 @@
  * @param   [in] server_port:broker端口
  * @return  NULL
  */
+
+RAMQ::RAMQ()
+{
+    amqp_connection_state_t sstate = amqp_new_connection();
+    state = sstate;
+}
 RAMQ::RAMQ(std::string server_url,int server_port)
 {
-    state = amqp_new_connection();
+    amqp_connection_state_t sstate = amqp_new_connection();
+    state = sstate;
     amqp_socket_t *socket = amqp_tcp_socket_new(state);
     assert(socket);
     url = server_url;
@@ -43,7 +51,6 @@ RAMQ::RAMQ(std::string server_url,int server_port)
     port = atoi(config["server_port"].asCString());
     int rc = amqp_socket_open(socket, url.c_str(),port);
     assert(rc == AMQP_STATUS_OK);
-    printf("\n3\n");
  }
 
 
@@ -92,10 +99,33 @@ amqp_connection_state_t RAMQ_Init(Json::Value config)
     assert(res != NULL);
     
    // amqp_queue_bind(state,CH_RECV,amqp_cstring_bytes(config["recv_queue"].asCString()),amqp_cstring_bytes(config["exchange"].asCString()),amqp_cstring_bytes("RECV"),amqp_empty_table);
-	amqp_queue_bind(state,CH_UPLOAD,amqp_cstring_bytes(config["upload_queue"].asCString()),amqp_cstring_bytes(config["exchange"].asCString()),amqp_cstring_bytes("UPLOAD"),amqp_empty_table);
+	//amqp_queue_bind(state,CH_UPLOAD,amqp_cstring_bytes(config["upload_queue"].asCString()),amqp_cstring_bytes(config["exchange"].asCString()),amqp_cstring_bytes("UPLOAD"),amqp_empty_table);
     return state;
 }
 
+int RAMQ::setconfig(Json::Value config)
+{
+    amqp_socket_t *socket = amqp_tcp_socket_new(state);
+
+    assert(socket);
+    url = config["server_url"].asString();
+    port = atoi(config["server_port"].asCString());
+    int rc = amqp_socket_open(socket, url.c_str(),port);
+    assert(rc == AMQP_STATUS_OK);
+    vhost = config["vhost"].asString();
+    channel_max = std::atoi(config["channel_max"].asCString());
+    username =config["username"].asString();
+    password = config["password"].asString();
+    exchange = config["exchange"].asString();
+    key = config["key"].asString();
+    connect(1048576);
+    recv_queue = config["recv_queue"].asString();
+    upload_queue = config["upload_queue"].asString();
+
+    open_channel(CH_RECV);
+    open_channel(CH_UPLOAD);
+    return RAMQ_OK;
+}
 
 /** 
  * @brief   初始化RabbitMQ链接
@@ -118,6 +148,8 @@ int RAMQ::connect(std::string host,std::string usrname,std::string pwd,int chann
     channel_max = channel_Max;
     username =usrname;
     password = pwd;
+    return RAMQ_OK;
+
 
 }
 
@@ -134,6 +166,8 @@ int RAMQ::connect(int frame_size,int heartbeat,amqp_sasl_method_enum sasl_method
 {
     reply = amqp_login(state,vhost.c_str(), channel_max,frame_size,heartbeat, sasl_method,username.c_str(), password.c_str());
     assert(reply.reply_type == AMQP_RESPONSE_NORMAL);
+    return RAMQ_OK;
+
 }
 
 /** 
@@ -158,6 +192,9 @@ int RAMQ::connect(Json::Value config,int frame_size,int heartbeat,amqp_sasl_meth
     password = config["password"].asString();
     reply = amqp_login(state,vhost.c_str(), channel_max,frame_size,heartbeat, sasl_method,username.c_str(), password.c_str());
     assert(reply.reply_type == AMQP_RESPONSE_NORMAL);
+    return RAMQ_OK;
+
+
 }
 
 
@@ -174,6 +211,7 @@ int RAMQ::declare_exchange(std::string name,std::string type)
 
 
 
+    return RAMQ_OK;
 
 }
 
@@ -218,6 +256,40 @@ void RAMQ::open_channel(int channel_id)
  * @param   [in] data:消息内容
  * @return  NULL
  */
+
+
+void RAMQ::publish()
+{
+    amqp_basic_properties_t properties;
+    properties._flags = 0;
+    properties._flags |= AMQP_BASIC_DELIVERY_MODE_FLAG;
+    properties.delivery_mode = AMQP_DELIVERY_NONPERSISTENT;
+    int res;
+    int times = 0;
+    while(1)
+    {
+        times++;
+        res = amqp_basic_publish(state,CH_UPLOAD,amqp_cstring_bytes(exchange.c_str()),amqp_cstring_bytes(key.c_str()),1,0,&properties,amqp_cstring_bytes(message.c_str()));
+        if(res == AMQP_STATUS_OK || times == 100)
+        {
+            break;
+        }
+    }
+    switch(res)
+    {
+        case AMQP_STATUS_OK:printf("\n发送成功\n");break;
+        case AMQP_STATUS_TIMER_FAILURE : printf("\n系统计时器设施返回错误，消息未被发送。\n");break;
+        case AMQP_STATUS_HEARTBEAT_TIMEOUT : printf("\n等待broker的心跳连接超时，消息未被发送\n");break;
+        case AMQP_STATUS_NO_MEMORY : printf("\n属性中的table太大而不适合单个框架，消息未被发送\n");break;
+        case AMQP_STATUS_TABLE_TOO_BIG : printf("\n属性中的table太大而不适合单个框架，消息未被发送\n");break;
+        case AMQP_STATUS_CONNECTION_CLOSED : printf("\n连接被关闭。\n");break;
+        case AMQP_STATUS_SSL_ERROR : printf("\n发生SSL错误。\n");break;
+        case AMQP_STATUS_TCP_ERROR : printf("\n发生TCP错误，errno或WSAGetLastError\n");break;
+        default : printf("\n[ERROR%d]发送失败，请检查网络状态\n",res);break;
+    }
+
+}
+
 void RAMQ:: publish(std::string data)
 {
     message = data;
@@ -236,7 +308,6 @@ void RAMQ:: publish(std::string data)
             break;
         }
     }
-    if(res != AMQP_STATUS_OK) printf("\n[ERROR]发送失败，请检查网络状态\n");
     switch(res)
     {
         case AMQP_STATUS_OK:printf("\n发送成功\n");break;
@@ -247,7 +318,7 @@ void RAMQ:: publish(std::string data)
         case AMQP_STATUS_CONNECTION_CLOSED : printf("\n连接被关闭。\n");break;
         case AMQP_STATUS_SSL_ERROR : printf("\n发生SSL错误。\n");break;
         case AMQP_STATUS_TCP_ERROR : printf("\n发生TCP错误，errno或WSAGetLastError\n");break;
-        default : printf("\n[ERROR]发送失败，请检查网络状态\n");break;
+        default : printf("\n[ERROR%d]发送失败，请检查网络状态\n",res);break;
     }
 }
 
@@ -262,20 +333,19 @@ int RAMQ::receive()
 {
     amqp_message_t mes;
     amqp_method_t method;
+    response.clear();
     printf("\n [START]\n");
     while(1)
 	{
         reply = amqp_basic_get(state,CH_RECV,amqp_cstring_bytes(recv_queue.c_str()),false);
         if(reply.reply_type==AMQP_RESPONSE_NORMAL && reply.reply.id!=AMQP_BASIC_GET_EMPTY_METHOD)
-        {
-            printf("\n [IN]\n");
-            
+        {   
             amqp_read_message(state,CH_RECV,&mes,0);
             char *body = new char[mes.body.len+1];
             memcpy(body, mes.body.bytes, mes.body.len);
             body[mes.body.len]='\0';
             response = std::string(body);
-            printf("body:%s\n",body);
+            printf("\nYou have a new message\n");
             amqp_destroy_message(&mes);
             method = reply.reply;
             s = (amqp_basic_ack_t*)method.decoded;

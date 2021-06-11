@@ -15,8 +15,6 @@
 #include <string.h>
 #include <jsoncpp/json/json.h>
 
-extern amqp_connection_state_t state;
-
 enum CHANNEL_TYPE
 {
     CH_UPLOAD=1,
@@ -58,7 +56,9 @@ public:
 public:
     RAMQ(std::string server_url,int server_port = AMQP_PROTOCOL_PORT);
     RAMQ(Json::Value config);
+    RAMQ();
     ~RAMQ();
+    int setconfig(Json::Value config);
     int connect(std::string host,std::string usrname,std::string pwd,int channel_Max = 2,int frame_size =AMQP_DEFAULT_FRAME_SIZE,int heartbeat = AMQP_DEFAULT_HEARTBEAT,amqp_sasl_method_enum sasl_method = AMQP_SASL_METHOD_PLAIN);
     int connect(int frame_size =AMQP_DEFAULT_FRAME_SIZE,int heartbeat = AMQP_DEFAULT_HEARTBEAT,amqp_sasl_method_enum sasl_method = AMQP_SASL_METHOD_PLAIN);
     int connect(Json::Value config,int frame_size =AMQP_DEFAULT_FRAME_SIZE,int heartbeat = AMQP_DEFAULT_HEARTBEAT,amqp_sasl_method_enum sasl_method = AMQP_SASL_METHOD_PLAIN);
@@ -68,13 +68,14 @@ public:
     void open_channel(int channel_id);
     void setUsername(std::string usrname);
     void setPassword(std::string pwd);
+    void publish();
     void publish(std::string data);
     void publish(std::string data,std::string routing_key);
     int receive();
     int receive(std::string queue);
     int ack();
 };
-
+extern RAMQ request;
 
 amqp_connection_state_t RAMQ_Init(Json::Value config);
 amqp_connection_state_t setup_connection_and_channel(void);
