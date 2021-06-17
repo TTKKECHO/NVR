@@ -40,7 +40,7 @@ BOOL CALLBACK MessageCallback(LONG lCommand, NET_DVR_ALARMER *pAlarmer, char *pA
             std::cout<<"长度："<<struFaceMatchAlarm.struSnapInfo.dwSnapFacePicLen<<std::endl;
             memcpy(face_buffer,struFaceMatchAlarm.struSnapInfo.pBuffer1,struFaceMatchAlarm.struSnapInfo.dwSnapFacePicLen);
             std::ofstream f;
-            f.open("./Image/face.jpeg");
+            f.open("./Image/face.txt");
             f<<face_buffer;
             f.close();
 
@@ -162,7 +162,14 @@ BOOL CALLBACK MessageCallback(LONG lCommand, NET_DVR_ALARMER *pAlarmer, char *pA
     return TRUE;
 }
 
-
+/**
+ * @brief   上传报警信息
+ * @author  liuguang
+ * @date    2021/05/31 
+ * @param   [in] name ：上传信息类型
+ * @param   [in] data ：上传信息内容
+ * @return  [int] 0为失败，1为成功
+ */
 int uploadAlarm(std::string name,Json::Value data)
 {
     RAMQ upload_ramq;
@@ -179,5 +186,6 @@ int uploadAlarm(std::string name,Json::Value data)
     message["header"]=header;
     message["payload"]=(payload);
     std::string message_data = writer.write(message);
-    upload_ramq.publish(message_data);
+    int status = upload_ramq.publish(message_data);
+    return status;
 }
