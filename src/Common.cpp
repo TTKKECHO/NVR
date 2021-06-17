@@ -12,11 +12,11 @@ using namespace std;
 
 
 /**
- * @brief  打印设备SDK版本信息
- * @author liuguang
- * @date 2021/05/27 
+ * @brief   打印设备SDK版本信息
+ * @author  liuguang
+ * @date    2021/05/27 
  * @param   [NULL]
- * @return [NULL]
+ * @return  [NULL]
  */
 void Demo_SDK_Version()
 {
@@ -33,15 +33,14 @@ void Demo_SDK_Version()
 
 
 /** 
- * @brief  GBK转UTF8
- * @author liuguang
- * @date 2021/05/24
- * @param 
- * @param  [in] gbkdata：GBK数据指针
- * @param  [in] len_gbk：GBK数据长度
- * @param  [in] utfdata：UTF8数据指针
- * @param  [in] len_utf：UTF8数据长度（GBK数据长度+2）
- * @return [int] 0为成功，-1为失败
+ * @brief   GBK转UTF8
+ * @author  liuguang
+ * @date    2021/05/24
+ * @param   [in] gbkdata：GBK数据指针
+ * @param   [in] len_gbk：GBK数据长度
+ * @param   [in] utfdata：UTF8数据指针
+ * @param   [in] len_utf：UTF8数据长度（GBK数据长度+2）
+ * @return  [int] 0为成功，-1为失败
  */
 int GBK_TO_UTF8(char *gbkdata,size_t len_gbk,char *utfdata,size_t len_utf)
 {
@@ -60,11 +59,11 @@ int GBK_TO_UTF8(char *gbkdata,size_t len_gbk,char *utfdata,size_t len_utf)
 }
 
 /**
- * @brief  获取图片在设备内的名称
- * @author liuguang
- * @date 2021/05/24
- * @param  [in] buffer：硬盘录像机返回的包含图片url的数据
- * @return   [string] 图片名称
+ * @brief   获取图片在设备内的名称
+ * @author  liuguang
+ * @date    2021/05/24
+ * @param   [in] buffer：硬盘录像机返回的包含图片url的数据
+ * @return  [string] 图片名称
  */
 std::string ReturnFileName(BYTE *buffer)
 {
@@ -82,13 +81,13 @@ std::string ReturnFileName(BYTE *buffer)
 }
 
 /**
- * @brief  char 转 uchar (可能没用)
- * @author liuguang
- * @date 2021/05/31
- * @param  [in] str_char ：char指针
- * @param  [in] str_uchar ：uchar指针
- * @param  [in] length ：字符串长度 
- * @return NULL
+ * @brief   char 转 uchar (可能没用)
+ * @author  liuguang
+ * @date    2021/05/31
+ * @param   [in] str_char ：char指针
+ * @param   [in] str_uchar ：uchar指针
+ * @param   [in] length ：字符串长度 
+ * @return  NULL
  */
 void charToUChar(char* str_char,unsigned char* str_uchar,int length)
 {
@@ -102,11 +101,11 @@ void charToUChar(char* str_char,unsigned char* str_uchar,int length)
 }
 
 /**
- * @brief  获取本地时间
- * @author liuguang
- * @date 2021/05/31
- * @param  [in] type ：返回时间类型，SEC到秒，MSEC毫秒，USEC微秒 
- * @return [string] 时间，格式 YYYYMMDDHHMMSS(mmuu)
+ * @brief   获取本地时间
+ * @author  liuguang
+ * @date    2021/05/31
+ * @param   [in] type ：返回时间类型，SEC到秒，MSEC毫秒，USEC微秒 
+ * @return  [string] 时间，格式 YYYYMMDDHHMMSS(mmuu)
  */
 std::string getLocalTime(int type)
 {
@@ -151,11 +150,11 @@ std::string getLocalTime(int type)
 
 
 /**
- * @brief  获取时间戳
- * @author liuguang
- * @date 2021/05/31 
- * @param  [in] type ：返回时间类型，SEC到秒，MSEC毫秒，USEC微秒 
- * @return [string] 时间戳
+ * @brief   获取时间戳
+ * @author  liuguang
+ * @date    2021/05/31 
+ * @param   [in] type ：返回时间类型，SEC到秒，MSEC毫秒，USEC微秒 
+ * @return  [string] 时间戳
  */
 std::string getTimeStamp(int type )
 {
@@ -196,13 +195,11 @@ std::string getTimeStamp(int type )
 
 
 /**
- * @brief  获取配置文件内容
- * @author liuguang
- * @date 2021/05/31
- * @param 
- * @param  [NULL]
- * @return  
- * @return [Json::Value] 配置文件内容
+ * @brief   获取配置文件内容
+ * @author  liuguang
+ * @date    2021/05/31 
+ * @param   [NULL]
+ * @return  [Json::Value] 配置文件内容
  */
 Json::Value getConfig()
 {
@@ -220,13 +217,11 @@ Json::Value getConfig()
 
 
 /**
- * @brief  设置配置文件内容
- * @author liuguang
- * @date 2021/05/31
- * @param 
- * @param  [in] data ：配置文件内容
- * @return  
- * @return [int] 0为成功，-1为失败
+ * @brief   设置配置文件内容
+ * @author  liuguang
+ * @date    2021/05/31
+ * @param   [in] data ：配置文件内容
+ * @return  [int] 0为成功，-1为失败
  */
 int setConfig(Json::Value data)
 {
@@ -242,13 +237,11 @@ int setConfig(Json::Value data)
 
 
 /**
- * @brief  初始化硬盘录像机
- * @author liuguang
- * @date 2021/05/31
- * @param 
- * @param  [in] config ：录像机配置文件内容
- * @return  
- * @return [long] 设备登录ID
+ * @brief   初始化硬盘录像机
+ * @author  liuguang
+ * @date    2021/05/31
+ * @param   [in] config ：录像机配置文件内容
+ * @return  [long] 设备登录ID
  */
 long NVR_Init(Json::Value config)
 {
