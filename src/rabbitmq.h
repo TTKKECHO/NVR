@@ -68,14 +68,15 @@ public:
     void open_channel(int channel_id);
     void setUsername(std::string usrname);
     void setPassword(std::string pwd);
-    void publish();
-    void publish(std::string data);
-    void publish(std::string data,std::string routing_key);
+    int publish();
+    int publish(std::string data);
+    int publish(Json::Value data);
+    int publish(Json::Value data,std::string routing_key);
+    int publish(std::string data,std::string routing_key);
     int receive();
     int receive(std::string queue);
     int ack();
 };
-extern RAMQ request;
 
 amqp_connection_state_t RAMQ_Init(Json::Value config);
 amqp_connection_state_t setup_connection_and_channel(void);

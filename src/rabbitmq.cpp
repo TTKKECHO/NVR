@@ -138,7 +138,7 @@ int RAMQ::setconfig(Json::Value config)
  * @param   [in] frame_size：最大帧长度，默认值131072，增大这个值有助于提高吞吐，降低这个值有利于降低时延
  * @param   [in] heartbeat: 心跳间隔，默认0关闭心跳，只支持部分功能的心跳
  * @param   [in] sasl_method: 验证方式，默认AMQP_SASL_METHOD_PLAIN
- * @return  [int] 执行结果标志，RAMQ_ERROR成功，RAMQ_OK失败
+ * @return  [int] 执行结果标志，RAMQ_ERROR失败，RAMQ_OK成功
  */
 int RAMQ::connect(std::string host,std::string usrname,std::string pwd,int channel_Max,int frame_size,int heartbeat,amqp_sasl_method_enum sasl_method)
 {
@@ -160,7 +160,7 @@ int RAMQ::connect(std::string host,std::string usrname,std::string pwd,int chann
  * @param   [in] frame_size：最大帧长度，默认值131072，增大这个值有助于提高吞吐，降低这个值有利于降低时延
  * @param   [in] heartbeat: 心跳间隔，默认0关闭心跳，只支持部分功能的心跳
  * @param   [in] sasl_method: 验证方式，默认AMQP_SASL_METHOD_PLAIN
- * @return  [int] 执行结果标志，RAMQ_ERROR成功，RAMQ_OK失败
+ * @return  [int] 执行结果标志，RAMQ_ERROR失败，RAMQ_OK成功
  */
 int RAMQ::connect(int frame_size,int heartbeat,amqp_sasl_method_enum sasl_method)
 {
@@ -182,7 +182,7 @@ int RAMQ::connect(int frame_size,int heartbeat,amqp_sasl_method_enum sasl_method
  * @param   [in] frame_size：最大帧长度，默认值131072，增大这个值有助于提高吞吐，降低这个值有利于降低时延
  * @param   [in] heartbeat: 心跳间隔，默认0关闭心跳，只支持部分功能的心跳
  * @param   [in] sasl_method: 验证方式，默认AMQP_SASL_METHOD_PLAIN
- * @return  [int] 执行结果标志，RAMQ_ERROR成功，RAMQ_OK失败
+ * @return  [int] 执行结果标志，RAMQ_ERROR失败，RAMQ_OK成功
  */
 int RAMQ::connect(Json::Value config,int frame_size,int heartbeat,amqp_sasl_method_enum sasl_method)
 {
@@ -204,7 +204,8 @@ int RAMQ::connect(Json::Value config,int frame_size,int heartbeat,amqp_sasl_meth
  * @date    2021/06/10
  * @param   [in] name 交换机名称
  * @param   [in] type: 交换机类型
- * @return  [int] 执行结果标志，RAMQ_ERROR成功，RAMQ_OK失败
+ * @return  [int] 执行结果标志，RAMQ_ERROR失败，RAMQ_OK成功
+
  */
 int RAMQ::declare_exchange(std::string name,std::string type)
 {
@@ -225,7 +226,7 @@ int RAMQ::declare_exchange(std::string name,std::string type)
  * @param   [in] durable: 1持久化；0非持久化
  * @param   [in] exclusive: 1当前连接不在时，队列自动删除 0当前连接不在时，队列不自动删除
  * @param   [in] auto_delete: 默认为 0没有consumer队列不自动删除；1没有consumer时，队列自动删除 
- * @return  [int] 执行结果标志，RAMQ_ERROR成功，RAMQ_OK失败
+ * @return  [int] 执行结果标志，RAMQ_ERROR失败，RAMQ_OK成功
  */
 void RAMQ::declare_queue(std::string name,int channel,int passive,int durable,int exclusive,int auto_delete)
 {
@@ -240,7 +241,7 @@ void RAMQ::declare_queue(std::string name,int channel,int passive,int durable,in
  * @author  liuguang
  * @date    2021/06/10
  * @param   [in] channel_id 打开通道的id
- * @return  [int] 执行结果标志，RAMQ_ERROR成功，RAMQ_OK失败
+ * @return  [int] 执行结果标志，RAMQ_ERROR失败，RAMQ_OK成功
  */
 void RAMQ::open_channel(int channel_id)
 {
@@ -254,11 +255,9 @@ void RAMQ::open_channel(int channel_id)
  * @author  liuguang
  * @date    2021/06/05
  * @param   [in] data:消息内容
- * @return  NULL
+ * @return  [int]
  */
-
-
-void RAMQ::publish()
+int RAMQ::publish()
 {
     amqp_basic_properties_t properties;
     properties._flags = 0;
@@ -277,7 +276,7 @@ void RAMQ::publish()
     }
     switch(res)
     {
-        case AMQP_STATUS_OK:printf("\n发送成功\n");break;
+        case AMQP_STATUS_OK:{printf("\n发送成功\n");return RAMQ_OK;}break;
         case AMQP_STATUS_TIMER_FAILURE : printf("\n系统计时器设施返回错误，消息未被发送。\n");break;
         case AMQP_STATUS_HEARTBEAT_TIMEOUT : printf("\n等待broker的心跳连接超时，消息未被发送\n");break;
         case AMQP_STATUS_NO_MEMORY : printf("\n属性中的table太大而不适合单个框架，消息未被发送\n");break;
@@ -287,10 +286,11 @@ void RAMQ::publish()
         case AMQP_STATUS_TCP_ERROR : printf("\n发生TCP错误，errno或WSAGetLastError\n");break;
         default : printf("\n[ERROR%d]发送失败，请检查网络状态\n",res);break;
     }
+    return RAMQ_EOORR;
 
 }
 
-void RAMQ:: publish(std::string data)
+int RAMQ:: publish(std::string data)
 {
     message = data;
     amqp_basic_properties_t properties;
@@ -310,7 +310,7 @@ void RAMQ:: publish(std::string data)
     }
     switch(res)
     {
-        case AMQP_STATUS_OK:printf("\n发送成功\n");break;
+        case AMQP_STATUS_OK:{printf("\n发送成功\n");return RAMQ_OK;}break;
         case AMQP_STATUS_TIMER_FAILURE : printf("\n系统计时器设施返回错误，消息未被发送。\n");break;
         case AMQP_STATUS_HEARTBEAT_TIMEOUT : printf("\n等待broker的心跳连接超时，消息未被发送\n");break;
         case AMQP_STATUS_NO_MEMORY : printf("\n属性中的table太大而不适合单个框架，消息未被发送\n");break;
@@ -320,7 +320,79 @@ void RAMQ:: publish(std::string data)
         case AMQP_STATUS_TCP_ERROR : printf("\n发生TCP错误，errno或WSAGetLastError\n");break;
         default : printf("\n[ERROR%d]发送失败，请检查网络状态\n",res);break;
     }
+    return RAMQ_EOORR;
 }
+
+int RAMQ:: publish(Json::Value data)
+{
+    Json::StyledWriter writer;
+    std::string jsdata = writer.write(data);
+    message = jsdata;
+    amqp_basic_properties_t properties;
+    properties._flags = 0;
+    properties._flags |= AMQP_BASIC_DELIVERY_MODE_FLAG;
+    properties.delivery_mode = AMQP_DELIVERY_NONPERSISTENT;
+    int res;
+    int times = 0;
+    while(1)
+    {
+        times++;
+        res = amqp_basic_publish(state,CH_UPLOAD,amqp_cstring_bytes(exchange.c_str()),amqp_cstring_bytes(key.c_str()),1,0,&properties,amqp_cstring_bytes(jsdata.c_str()));
+        if(res == AMQP_STATUS_OK || times == 100)
+        {
+            break;
+        }
+    }
+    switch(res)
+    {
+        case AMQP_STATUS_OK:{printf("\n发送成功\n");return RAMQ_OK;}break;
+        case AMQP_STATUS_TIMER_FAILURE : printf("\n系统计时器设施返回错误，消息未被发送。\n");break;
+        case AMQP_STATUS_HEARTBEAT_TIMEOUT : printf("\n等待broker的心跳连接超时，消息未被发送\n");break;
+        case AMQP_STATUS_NO_MEMORY : printf("\n属性中的table太大而不适合单个框架，消息未被发送\n");break;
+        case AMQP_STATUS_TABLE_TOO_BIG : printf("\n属性中的table太大而不适合单个框架，消息未被发送\n");break;
+        case AMQP_STATUS_CONNECTION_CLOSED : printf("\n连接被关闭。\n");break;
+        case AMQP_STATUS_SSL_ERROR : printf("\n发生SSL错误。\n");break;
+        case AMQP_STATUS_TCP_ERROR : printf("\n发生TCP错误，errno或WSAGetLastError\n");break;
+        default : printf("\n[ERROR%d]发送失败，请检查网络状态\n",res);break;
+    }
+    return RAMQ_EOORR;
+}
+
+int RAMQ:: publish(Json::Value data,std::string routing_key)
+{
+    Json::StyledWriter writer;
+    std::string jsdata = writer.write(data);
+    message = jsdata;
+    amqp_basic_properties_t properties;
+    properties._flags = 0;
+    properties._flags |= AMQP_BASIC_DELIVERY_MODE_FLAG;
+    properties.delivery_mode = AMQP_DELIVERY_NONPERSISTENT;
+    int res;
+    int times = 0;
+    while(1)
+    {
+        times++;
+        res = amqp_basic_publish(state,CH_UPLOAD,amqp_cstring_bytes(exchange.c_str()),amqp_cstring_bytes(routing_key.c_str()),1,0,&properties,amqp_cstring_bytes(jsdata.c_str()));
+        if(res == AMQP_STATUS_OK || times == 100)
+        {
+            break;
+        }
+    }
+    switch(res)
+    {
+        case AMQP_STATUS_OK:{printf("\n发送成功\n");return RAMQ_OK;}break;
+        case AMQP_STATUS_TIMER_FAILURE : printf("\n系统计时器设施返回错误，消息未被发送。\n");break;
+        case AMQP_STATUS_HEARTBEAT_TIMEOUT : printf("\n等待broker的心跳连接超时，消息未被发送\n");break;
+        case AMQP_STATUS_NO_MEMORY : printf("\n属性中的table太大而不适合单个框架，消息未被发送\n");break;
+        case AMQP_STATUS_TABLE_TOO_BIG : printf("\n属性中的table太大而不适合单个框架，消息未被发送\n");break;
+        case AMQP_STATUS_CONNECTION_CLOSED : printf("\n连接被关闭。\n");break;
+        case AMQP_STATUS_SSL_ERROR : printf("\n发生SSL错误。\n");break;
+        case AMQP_STATUS_TCP_ERROR : printf("\n发生TCP错误，errno或WSAGetLastError\n");break;
+        default : printf("\n[ERROR%d]发送失败，请检查网络状态\n",res);break;
+    }
+    return RAMQ_EOORR;
+}
+
 
 /** 
  * @brief   消息接收（使用默认参数）
