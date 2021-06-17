@@ -9,6 +9,7 @@
    {
       "channel_max" : "2",
       "exchange" : "amq.topic",
+      "key" : "UPLOAD",
       "password" : "admin",
       "recv_queue" : "teat",
       "server_port" : "5672",
@@ -18,22 +19,41 @@
       "vhost" : "/"
    },
    {
-      "device_id" : "test0d",
+      "device_id" : null,
+      "facelib" : "",
       "标段" : "",
       "项目" : ""
    },
    {
-      "header" : {
-         "messageId" : "20210608140755",
-         "name" : "device.loginfo",
-         "namespace" : "xinke.device.setconfig"
-      },
-      "payload" : {
-         "device_id" : "test03",
-         "device_ip" : "192.168.0.32",
-         "password" : "211aAT518",
-         "port" : "8000",
-         "username" : "admin"
-      }
+      "device_list" : [
+         {
+            "channel" : "1",
+            "time_interval" : "5",
+            "time_part" : [
+               {
+                  "begin" : "00:00:00",
+                  "end" : "08:08:08"
+               },
+               {
+                  "begin" : "12:12:12",
+                  "end" : "18:18:18"
+               }
+            ]
+         },
+         {
+            "channel" : "2",
+            "time_interval" : "5",
+            "time_part" : [
+               {
+                  "begin" : "00:00:00",
+                  "end" : "08:08:08"
+               },
+               {
+                  "begin" : "12:12:12",
+                  "end" : "18:18:18"
+               }
+            ]
+         }
+      ]
    }
 ]
