@@ -5,13 +5,11 @@
 
 
 /**
- * @Description：\brief 设备报警处理函数
- * @Author:liuguang
- * @Date:2021/05/27 
- * @Param:
- *      \param  [in] user_id: 设备登录ID
- * @return： 
- *      \returns [int] 0为失败
+ * @brief   设备报警处理函数
+ * @author  liuguang
+ * @date    2021/05/27 
+ * @param   [in] user_id: 设备登录ID
+ * @return  [int] 0为失败
  */
 int thread_ALARM(long user_id)
 {
@@ -24,7 +22,6 @@ int thread_ALARM(long user_id)
     struAlarmParam.dwSize=sizeof(struAlarmParam);
 	struAlarmParam.byAlarmTypeURL=0<<3;
 	// struAlarmParam.byAlarmTypeURL=0;
-
 	//struAlarmParam.byFaceAlarmDetection = 0;
     //其他报警布防参数不需要设置
 
@@ -48,7 +45,13 @@ int thread_ALARM(long user_id)
     
 }
 
-
+/**
+ * @brief   网络通信线程（不使用）
+ * @author  liuguang
+ * @date    2021/05/31
+ * @param   [in] user_id ：设备登录ID
+ * @return  [long] 设备登录ID
+ */
 int thread_WEB(long user_id)
 {
     printf("\n建立网络连接通道...\n");
@@ -79,6 +82,13 @@ int thread_WEB(long user_id)
 }
 
 
+/**
+ * @brief   RAMQ通信线程
+ * @author  liuguang
+ * @date    2021/05/31
+ * @param   [in] user_id ：设备登录ID
+ * @return  [long] 设备登录ID
+ */
 int thread_RAMQ()
 {
 
@@ -97,19 +107,18 @@ int thread_RAMQ()
         {
             if(reader.parse(request.response,message))
             {
-                if(!message["header"].isNull())
+
+                if(  message.isObject() && !message["header"].isNull() )
                 {
+
                     selectFun(message);
-                    std::cout<<"message type:"<<message["header"]["name"].asString()<<std::endl;
+                    std::cout<<"message type:"<<message["header"]["namespace"].asString()<<std::endl;
                     std::cout<<"messageid:"<<message["header"]["messageId"].asString()<<std::endl;
-                    std::cout<<"name:"<<message["payload"]["name"].asString()<<std::endl;
+                    std::cout<<"name:"<<message["header"]["name"].asString()<<std::endl;
                 }
-                
             }
             request.ack();
-           
         }
-
     }
     
     printf("\n[ERROR]网络通道断开，RAMQ线程退出\n");
