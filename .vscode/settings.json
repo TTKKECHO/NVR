@@ -47,7 +47,9 @@
         "thread": "cpp",
         "chrono": "cpp",
         "ctime": "cpp",
-        "ratio": "cpp"
+        "ratio": "cpp",
+        "functional": "cpp",
+        "numeric": "cpp"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }
