@@ -3,10 +3,11 @@
 
 #include "HCNetSDK.h"
 #include "Common.h"
-#include "http_libcurl.h"
+// #include "http_libcurl.h"
 #include "alarm.h"
 
 int thread_ALARM(long user_id);
-int thread_WEB(long user_id);
 int thread_RAMQ();
+// int thread_WEB(long user_id);
+
 #endif
