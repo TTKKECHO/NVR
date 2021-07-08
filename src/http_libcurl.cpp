@@ -94,6 +94,7 @@ void http_init(long type )
  * @Author:liuguang
  * @Date:2021/05/27
  * @Param:
+ * 
  *      params:请求头字符串，多个请求头中间用 ; 隔开
  */
 void HLC::headers(std::string params)
