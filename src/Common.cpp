@@ -40,7 +40,7 @@ void Demo_SDK_Version()
  * @param   [in] len_gbk：GBK数据长度
  * @param   [in] utfdata：UTF8数据指针
  * @param   [in] len_utf：UTF8数据长度（GBK数据长度+2）
- * @return  [int] 0为成功，-1为失败
+ * @return  [int] 1为成功，0为失败
  */
 int GBK_TO_UTF8(char *gbkdata,size_t len_gbk,char *utfdata,size_t len_utf)
 {
@@ -49,13 +49,13 @@ int GBK_TO_UTF8(char *gbkdata,size_t len_gbk,char *utfdata,size_t len_utf)
 	char ** pout = &utfdata;
 	cd = iconv_open("utf8","gbk");
 	if(cd == 0)
-		return -1;
+		return 0;
 	memset(utfdata,0,len_utf);
 	if(iconv(cd,pin,&len_gbk,pout,&len_utf)==1)
-		return -1;
+		return 0;
 	iconv_close(cd);
 	*pout = 0;
-	return 0;
+	return 1;
 }
 
 /**
@@ -63,25 +63,58 @@ int GBK_TO_UTF8(char *gbkdata,size_t len_gbk,char *utfdata,size_t len_utf)
  * @author  liuguang
  * @date    2021/05/24
  * @param   [in] buffer：硬盘录像机返回的包含图片url的数据
- * @return  [string] 图片名称
+ * @param   [in] filename：图片名称
+ * @param   [in] len：图片大小
+ * @return  [int] 0为失败，1为成功
  */
-std::string ReturnFileName(BYTE *buffer)
+int ReturnFileName(BYTE *buffer,std::string &filename,int &len)
 {
-
+    int status = 0;
     char *faceFileName = (char*)buffer;
     char fileBuffer[4096];
-    GBK_TO_UTF8(faceFileName,strlen(faceFileName),fileBuffer,strlen(faceFileName)+2);
+    status = GBK_TO_UTF8(faceFileName,strlen(faceFileName),fileBuffer,strlen(faceFileName)+2);
+    if(status == 0) return status;
     std::string str(fileBuffer);
     int index_head,index_tail;
     index_head = str.find("=");
     index_tail = str.find("&");
+    //printf("\nhead:%d\ttail:%d\n",index_head,index_tail);
+
     std::string result;
     result=str.substr(index_head+1,index_tail-index_head-1);
-    return result;
+    len = atoi(str.substr(index_tail+6,str.size()).c_str());
+    filename = result;
+    return status;
 }
 
 /**
- * @brief   char 转 uchar (可能没用)
+ * @brief   获取图片在设备内的名称
+ * @author  liuguang
+ * @date    2021/05/24
+ * @param   [in] url：硬盘录像机返回的包含图片url的数据
+ * @param   [in] filename：图片名称
+ * @param   [in] len：图片大小
+ * @return  [int] 0为失败，1为成功
+ */
+int ReturnFileName(std::string url,std::string &filename,int &len)
+{
+
+    std::string str=url;
+    int index_head,index_tail;
+    index_head = str.find("=");
+    index_tail = str.find("&");
+    if(!index_head && !index_tail) return 0;
+    //printf("\nhead:%d\ttail:%d\n",index_head,index_tail);
+    std::string result;
+    result=str.substr(index_head+1,index_tail-index_head-1);
+    len = atoi(str.substr(index_tail+6,str.size()).c_str());
+    filename = result;
+    return 1;
+}
+
+
+/**
+ * @brief   char 转 uchar (没用)
  * @author  liuguang
  * @date    2021/05/31
  * @param   [in] str_char ：char指针
@@ -221,18 +254,18 @@ Json::Value getConfig()
  * @author  liuguang
  * @date    2021/05/31
  * @param   [in] data ：配置文件内容
- * @return  [int] 0为成功，-1为失败
+ * @return  [int] 1为成功，0为失败
  */
 int setConfig(Json::Value data)
 {
     Json::StyledWriter writer;
     std::string strdata = writer.write(data);
     ofstream f;
-	f.open("./src/config2.json",ios::in|ios::out);
-    if(!f.is_open()){return -1;}
+	f.open("./src/config.json",ios::in|ios::out);
+    if(!f.is_open()){return 0;}
     f << strdata;
     f.close();
-    return 0;
+    return 1;
 }
 
 
@@ -241,14 +274,14 @@ int setConfig(Json::Value data)
  * @author  liuguang
  * @date    2021/05/31
  * @param   [in] config ：录像机配置文件内容
- * @return  [long] 设备登录ID
+ * @return  [long] 设备登录ID，-1为失败
  */
 long NVR_Init(Json::Value config)
 {
     /************************声明变量************************/
     NET_DVR_USER_LOGIN_INFO LoginInfo  = {0};					//设备登录参数
     NET_DVR_DEVICEINFO_V40  DeviceInfo = {0};					//设备信息
-	NET_DVR_COMPRESSIONCFG_V30 device_compression = {0};
+	// NET_DVR_COMPRESSIONCFG_V30 device_compression = {0};
 	LONG user_id;
 	
 	//load LoginInfo
@@ -259,7 +292,7 @@ long NVR_Init(Json::Value config)
     memcpy(LoginInfo.sPassword, config["password"].asCString(), NAME_LEN);
 	
 /************************Start************************/
-	printf("Device Initialization...\n");
+	printf("[DEVICE INIT]Device Initialization...\n");
 	//设备初始化，设置超时、重连时间
 	NET_DVR_Init();
 	NET_DVR_SetConnectTime(2000,1);
