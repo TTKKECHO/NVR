@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <jsoncpp/json/json.h>
+#include "Common.h"
 
 enum CHANNEL_TYPE
 {
@@ -29,29 +30,29 @@ enum QUEUE_TYPE
 
 enum RAMQ_RETURN
 {
-    RAMQ_EOORR=0,
+    RAMQ_ERROR=0,
     RAMQ_OK
 };
 
 class RAMQ
 {
 private:
-    amqp_connection_state_t state;
-    std::string username;
-    std::string password;
+    amqp_connection_state_t state;      //RAMQ连接对象
+    std::string username;               //RAMQ账号
+    std::string password;               //RAMQ密码
 public:
-    int port;
-    int channel_max;
-    std::string url;
-    std::string vhost;
-    std::string exchange;
-    std::string exchange_type;
-    std::string key;
-    std::string upload_queue;
-    std::string recv_queue;
-    std::string message;
-    std::string response;
-    amqp_basic_ack_t *s;
+    int port;                           //broker连接端口
+    int channel_max;                    //最大通道数
+    std::string url;                    //broker连接地址
+    std::string vhost;                  //虚拟路由
+    std::string exchange;               //交换机
+    std::string exchange_type;          //交换机类型
+    std::string key;                    //路由键
+    std::string upload_queue;           //上传队列
+    std::string recv_queue;             //接收队列
+    std::string message;                //将要发送的信息
+    std::string response;               //接收到的信息
+    amqp_basic_ack_t *s;                //接收信息标志，用于消费消息
     amqp_rpc_reply_t reply;
 public:
     RAMQ(std::string server_url,int server_port = AMQP_PROTOCOL_PORT);
@@ -63,30 +64,26 @@ public:
     int connect(int frame_size =AMQP_DEFAULT_FRAME_SIZE,int heartbeat = AMQP_DEFAULT_HEARTBEAT,amqp_sasl_method_enum sasl_method = AMQP_SASL_METHOD_PLAIN);
     int connect(Json::Value config,int frame_size =AMQP_DEFAULT_FRAME_SIZE,int heartbeat = AMQP_DEFAULT_HEARTBEAT,amqp_sasl_method_enum sasl_method = AMQP_SASL_METHOD_PLAIN);
     int declare_exchange(std::string name,std::string type);
-    void declare_queue(std::string name,int channel,int passive=0,int durable=0,int exclusive=0,int auto_delete = 1);
-    void queue_bind(int channel,std::string queue,std::string exChange,std::string Key);
-    void open_channel(int channel_id);
-    void setUsername(std::string usrname);
-    void setPassword(std::string pwd);
     int publish();
     int publish(std::string data);
     int publish(Json::Value data);
     int publish(Json::Value data,std::string routing_key);
     int publish(std::string data,std::string routing_key);
+    int publish_with_id(std::string id);
+    int publish_with_id(std::string data,std::string id);
+
     int receive();
     int receive(std::string queue);
     int ack();
+
+    void declare_queue(std::string name,int channel,int passive=0,int durable=0,int exclusive=0,int auto_delete = 1);
+    void queue_bind(int channel,std::string queue,std::string exChange,std::string Key);
+    void open_channel(int channel_id);
+    void setUsername(std::string usrname);
+    void setPassword(std::string pwd);
 };
 
-amqp_connection_state_t RAMQ_Init(Json::Value config);
-amqp_connection_state_t setup_connection_and_channel(void);
-void close_and_destroy_connection(amqp_connection_state_t connection_state_);
-void basic_publish(amqp_connection_state_t connectionState_,const char *message_);
-void queue_declare(amqp_connection_state_t connection_state_,const char *queue_name_);
-char *basic_get(amqp_connection_state_t connection_state_,const char *queue_name_, uint64_t *out_body_size_);
-void publish_and_basic_get_message(const char *msg_to_publish);
-char *consume_message(amqp_connection_state_t connection_state_,const char *queue_name_, uint64_t *out_body_size_) ;
-void publish_and_consume_message(const char *msg_to_publish);
+void close_and_destroy_connection(amqp_connection_state_t state) ;
 
 
 
