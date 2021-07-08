@@ -1,0 +1,21 @@
+{
+   "header" : {
+      "messageId" : "20210629120135",
+      "name" : "device.vehicleinfo",
+      "namespace" : "xinke.device.upload"
+   },
+   "payload" : {
+      "device_id" : "test01",
+      "record_time" : "20210629120218",
+      "timestamp" : "20210629120135",
+      "vehicle_list" : [
+         {
+            "plate" : "蓝浙J2L252",
+            "plate_rect" : "0.45130199999999998,0.447266,0.201599,0.111328",
+            "vehicle_rect" : "0.22864599999999999,0.0083330000000000001,0.63749999999999996,0.88148099999999996",
+            "image_background":"base64",
+            "image_vehicle":"base64"
+         }
+      ]
+   }
+}
