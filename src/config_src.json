@@ -1,0 +1,27 @@
+[
+   {
+      "device_ip" : "192.168.0.32",
+      "username" : "admin",
+      "password" : "211aAT518",
+      "port" : "8000"
+   },
+   {
+      "server_url":"192.168.2.47",
+      "server_port":"5672",
+      "vhost":"/xinke",
+      "exchange":"topicExchange",
+      "recv_queue":"topic.first",
+      "upload_queue" : "receive.message",
+      "username" : "zhangxiaozhou",
+      "password" : "123456",
+      "channel_max":"2",
+      "key":"receive.message"
+   },
+   {  
+       "project":"",
+       "section":"",
+       "facelib":"工人库",
+       "device_id":"test01",
+       "facelib_fdid":"EE96E5C51DE14E3EA22ABA2FED01E5DA"
+   }
+]

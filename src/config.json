@@ -1,60 +1,27 @@
 [
    {
       "device_ip" : "192.168.0.32",
-      "username" : "admin",
       "password" : "211aAT518",
       "port" : "8000",
-      "face_lib":""
+      "username" : "admin"
    },
    {
-      "server_url":"www.liuguang.space",
-      "server_port":"5672",
-      "vhost":"/",
-      "exchange":"amq.topic",
-      "recv_queue":"teat",
+      "channel_max" : "2",
+      "exchange" : "amq.topic",
+      "key" : "UPLOAD",
+      "password" : "admin",
+      "recv_queue" : "test queue",
+      "server_port" : "5672",
+      "server_url" : "www.liuguang.space",
       "upload_queue" : "teat",
       "username" : "admin",
-      "password" : "admin",
-      "channel_max":"2",
-      "key":"UPLOAD"
-   },
-   {  
-       "项目":"",
-       "标段":"",
-       "facelib":"",
-       "device_id":"test01"
+      "vhost" : "/"
    },
    {
-    "device_list":[
-        {
-            "channel":"1",
-            "time_part":[
-                {
-                    "begin":"00:00:00",
-                    "end":"08:08:08"
-                },
-                {
-                    "begin":"12:12:12",
-                    "end":"18:18:18"
-                }
-            ],
-            "time_interval":"5"
-        },
-        {
-            "channel":"2",
-            "time_part":[
-                {
-                    "begin":"00:00:00",
-                    "end":"08:08:08"
-                },
-                {
-                    "begin":"12:12:12",
-                    "end":"18:18:18"
-                }
-            ],
-            "time_interval":"5"
-        }
-    ]
-  }
-  
+      "device_id" : "test01",
+      "facelib" : "工人库",
+      "facelib_fdid" : "EE96E5C51DE14E3EA22ABA2FED01E5DA",
+      "section" : "路桥1标",
+      "project" : "杨高路改建项目"
+   }
 ]
